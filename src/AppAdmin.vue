@@ -3,11 +3,28 @@
         <router-view/>
     </div>
 </template>
+
 <script>
-    // 客服端
+    import {getUserInfo} from "./api/user"
+    import {statusCode} from "./util/statusCode";
+
     export default {
         created() {
             document.querySelector("title").innerHTML = '后台管理系统'
+            // this.init()
+        },
+        methods: {
+            // async init() {
+            //     try {
+            //         const {data} = await getUserInfo()
+            //         console.log(data)
+            //         if (data.code === statusCode.success) {
+            //             console.log('getUserInfo')
+            //         }
+            //     } catch (e) {
+            //         console.log("error---------error")
+            //     }
+            // }
         }
     };
 </script>

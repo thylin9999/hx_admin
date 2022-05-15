@@ -9,7 +9,7 @@
     import SuggestList from "../suggestList/index"
     import MessageManage from "../messageManage/index"
 
-    import api from '../../../../src/router/api.js'
+    // import api from '../../../../src/router/api.js'
 
     export default {
         components: {
@@ -57,14 +57,14 @@
         mounted() {
             this.getInitdata()
             this.getGroup()
-            console.log("--------------------")
-            console.log("--------------------")
-            api.mockdata('/data/home').then(res => {
-                console.log(res);
-            })
-            api.mockdata('/data/manager').then(res => {
-                console.log(res);
-            })
+            // console.log("--------------------")
+            // console.log("--------------------")
+            // api.mockdata('/data/home').then(res => {
+            //     console.log(res);
+            // })
+            // api.mockdata('/data/manager').then(res => {
+            //     console.log(res);
+            // })
         },
         methods: {
             leftSelect(item) {
