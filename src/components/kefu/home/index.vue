@@ -9,8 +9,6 @@
     import SuggestList from "../suggestList/index"
     import MessageManage from "../messageManage/index"
 
-    // import api from '../../../../src/router/api.js'
-
     export default {
         components: {
             CustomerList, AdminList, KefuSensus, CommonQuestions, ComplainList, SuggestList, MessageManage
@@ -57,14 +55,6 @@
         mounted() {
             this.getInitdata()
             this.getGroup()
-            // console.log("--------------------")
-            // console.log("--------------------")
-            // api.mockdata('/data/home').then(res => {
-            //     console.log(res);
-            // })
-            // api.mockdata('/data/manager').then(res => {
-            //     console.log(res);
-            // })
         },
         methods: {
             leftSelect(item) {
@@ -99,29 +89,7 @@
                 return value;
             },
             logout() {
-                // this.$confirm('确认退出此账号?', '提示', {
-                //     confirmButtonText: '确定',
-                //     cancelButtonText: '取消',
-                //     type: 'warning'
-                // }).then(() => {
-                //     this.axios({
-                //         url: `${apiUrl}/admin/login/LogOut`,
-                //         method: 'post',
-                //         data: {
-                //             token: this.adminInfo.token,
-                //             uid: this.adminInfo.data.id
-                //         }
-                //     }).then(res => {
-                //         if (res.data.code == 20000) {
-                //             localStorage.removeItem("adminInfo")
-                this.$router.push({name: 'Login'})
-                //         } else {
-                //             this.$message.error(res.data.msg);
-                //         }
-                //     }).catch(err => {
-                //         this.$message.error('操作失败');
-                //     })
-                // })
+                console.log('logout')
             },
             goWaitDeal(str) {
                 if (str == 'c') {
