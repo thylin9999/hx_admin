@@ -25,9 +25,8 @@
                 leftlist: [
                     {title: "后台系统", path: "top", icon: "el-icon-s-home", index: 0},
                     {title: "首页", path: "home", icon: "el-icon-s-home", index: 1},
-                    // { title: "角色管理", path: "adminList", icon: "el-icon-s-custom", index: 2 },
                     {title: "管理员管理", path: "adminList", icon: "el-icon-s-custom", index: 2},
-                    {title: "客服列表", path: "customerList", icon: "el-icon-headset", index: 3},
+                    {title: "会员管理", path: "customerList", icon: "el-icon-headset", index: 3},
                     {title: "客服统计", path: "kefuSensus", icon: "el-icon-s-check", index: 4},
                     {title: "常见问题", path: "commonQuestions", icon: "el-icon-s-opportunity", index: 5},
                     {title: "投诉列表", path: "complainList", icon: "el-icon-s-open", index: 6},

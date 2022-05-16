@@ -4,7 +4,7 @@
             <button class="btnEdit" @click="optionList('forbid')">批量禁用</button>
             <button class="btnEdit" @click="optionList('open')">批量解除</button>
             <button class="btnEdit" @click="toggleSelection()">取消已选</button>
-            <button class="btnAdd" @click="addCustomer">新增客服</button>
+            <button class="btnAdd" @click="addCustomer">新增会员</button>
         </div>
         <el-table
                 :cell-style="setSellStyle"
@@ -16,6 +16,7 @@
                 style="width: 100%">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column type="index" label="序号"></el-table-column>
+            <el-table-column prop="username" label="会员账号"></el-table-column>
             <el-table-column prop="avatar" label="头像">
                 <template slot-scope="scope">
                     <el-image
@@ -25,42 +26,21 @@
                     </el-image>
                 </template>
             </el-table-column>
-            <el-table-column prop="username" label="用户名"></el-table-column>
-            <el-table-column prop="nick_name" label="客服昵称"></el-table-column>
-            <el-table-column prop="customer_no" label="客服编号"></el-table-column>
-            <el-table-column prop="group_name" label="组别 ↓"></el-table-column>
+            <el-table-column prop="nick_name" label="会员昵称"></el-table-column>
             <el-table-column prop="create_time" label="创建时间"></el-table-column>
-            <el-table-column prop="age" label="年龄"></el-table-column>
-            <el-table-column prop="work_time" label="工龄"></el-table-column>
-            <el-table-column prop="djrs" sortable label="对接人数"></el-table-column>
-            <el-table-column prop="hps" sortable label="好评数">
-                <template slot-scope="scope">
-                    <span :style="Number(scope.row.hps) > 0 ? fontColor.hp : ''">{{ scope.row.hps }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column prop="cps" sortable label="差评数">
-                <template slot-scope="scope">
-                    <span :style="scope.row.cps > 0 ? fontColor.cp : ''">{{ scope.row.cps }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column prop="tss" sortable label="投诉数">
-                <template slot-scope="scope">
-                    <span :style="scope.row.tss > 0 ? fontColor.ts : ''">{{ scope.row.tss }}</span>
-                </template>
-            </el-table-column>
             <el-table-column prop="isForbid" label="是否禁用">
                 <template slot-scope="scope">
                     <div class="circle" :class="scope.row.status == 1 ?  'circleGreen' : 'circleRed'"></div>
-                    {{ scope.row.status == '1' ? '否' : '是' }}
+                    {{scope.row.status == '1' ? '否' : '是'}}
                 </template>
             </el-table-column>
-            <el-table-column prop="online" label="状态">
-                <template slot-scope="scope">
-                    <div class="circle" :class="scope.row.online == '1' ? 'circleGreen' : 'circleRed'"></div>
-                    {{ scope.row.online == '1' ? '在线' : '离线' }}
+            <!--            <el-table-column prop="online" label="状态">-->
+            <!--                <template slot-scope="scope">-->
+            <!--                    <div class="circle" :class="scope.row.online == '1' ? 'circleGreen' : 'circleRed'"></div>-->
+            <!--                    {{ scope.row.online == '1' ? '在线' : '离线' }}-->
 
-                </template>
-            </el-table-column>
+            <!--                </template>-->
+            <!--            </el-table-column>-->
             <el-table-column prop="opt" label="操作" width="200">
                 <template slot-scope="scope">
                     <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)">编辑</button>
@@ -70,18 +50,12 @@
         </el-table>
         <el-dialog :title="isEditOrAddL" :visible.sync="dialogFormVisible" width="35%">
             <el-form :model="form">
-                <el-form-item label="用户名" :label-width="formLabelWidth">
-                    <el-input :disabled="popupType === 'editCustomer'" v-model="form.name"
+                <el-form-item label="会员账号" :label-width="formLabelWidth">
+                    <el-input :disabled="popupType === 'editCustomer'" v-model="form.account"
                               autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="域名" :label-width="formLabelWidth">
-                    <el-input v-model="form.domain" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="客服昵称" :label-width="formLabelWidth">
+                <el-form-item label="会员昵称" :label-width="formLabelWidth">
                     <el-input v-model="form.nickname" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="客服编号" :label-width="formLabelWidth">
-                    <el-input v-model="form.num" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="popupType === 'addCustomer'" label="登录密码" :label-width="formLabelWidth">
                     <el-input v-model="form.password" autocomplete="off"></el-input>
@@ -89,25 +63,8 @@
                 <el-form-item v-else label="密码" :label-width="formLabelWidth">
                     <el-input placeholder="不填写则默认当前密码" v-model="form.password" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="组别" :label-width="formLabelWidth">
-                    <el-select v-model="form.group" placeholder="请选择分组">
-                        <el-option v-for="(item,i) in groupList" :label="item.group_name" :value="item.id"
-                                   :key="i"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="年龄" :label-width="formLabelWidth">
-                    <el-input v-model="form.age" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="工龄" :label-width="formLabelWidth">
-                    <el-input v-model="form.work_time" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="客服介绍" :label-width="formLabelWidth">
-                    <el-input type="textarea" v-model="form.introduce" autocomplete="off"></el-input>
-                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <!--                <el-button @click="dialogFormVisible = false">取 消</el-button>-->
-                <!--                <el-button type="primary" @click="submit">提 交</el-button>-->
                 <button class="btnCancle" @click="dialogFormVisible = false">取 消</button>
                 <button class="btnSubmit" type="primary" @click="submit">提 交</button>
             </div>
@@ -151,38 +108,21 @@
                 selectList: [],
                 dialogFormVisible: false,
                 form: {
-                    name: '',
+                    account: '',
                     nickname: '',
-                    num: null,
                     password: "",
-                    group: '',
-                    age: null,
-                    work_time: "",
-                    introduce: '',
-                    domain: ''
                 },
                 formLabelWidth: '100px',
                 multipleSelection: [],
                 tableData: [],
-                isEditOrAddL: "新增客服",
-                topList: [{title: "客服列表", path: ""}]
+                isEditOrAddL: "新增会员",
+                topList: [{title: "会员列表", path: ""}]
             }
         },
         watch: {
             dialogFormVisible(newVal, oldVal) {
                 if (!newVal && this.popupType != 'addCustomer') { //新增窗口 &&  弹窗关闭状态
-                    this.form = {
-                        name: "",
-                        nickname: "",
-                        num: "",
-                        password: "",
-                        group: "",
-                        age: "",
-                        work_time: "",
-                        introduce: "",
-                        id: "",
-                        domain: ''
-                    }
+                    this.form = {account: "", nickname: "", password: "",}
                 }
             }
         },
@@ -210,12 +150,12 @@
                 this.selectList = val
             },
             addCustomer() {
-                this.isEditOrAddL = "新增客服"
+                this.isEditOrAddL = "新增会员"
                 this.dialogFormVisible = true
                 this.popupType = "addCustomer"
             },
             handleEdit(index, row) {
-                this.isEditOrAddL = "编辑客服"
+                this.isEditOrAddL = "编辑会员"
                 this.dialogFormVisible = true
                 this.popupType = "editCustomer"
                 this.form = {
@@ -232,7 +172,7 @@
                 }
             },
             handleDelete(index, row) {
-                this.$confirm(`此操作将永久删除客服【${row.username}】, 是否继续?`, '提示', {
+                this.$confirm(`此操作将永久删除会员【${row.username}】, 是否继续?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'

@@ -9,8 +9,7 @@
                                      background-color="#000" text-color="#fff">
                                 <el-menu-item :index="''+i" v-for="(item,i) in leftlist" :key="i"
                                               :disabled="item.path == 'top'" @click="leftSelect(item)">
-                                    <img v-if="item.path == 'top'" :src="logo"
-                                         style="width: 20px;height: 20px;margin-right: 7px"/>
+                                    <img class="logo" v-if="item.path == 'top'" :src="logo"/>
                                     <div v-else v-show="i == index"
                                          style="width: 6px; height: 6px;border-radius: 3px; background-color: #ff4600;display: inline-block;margin:0 15px;">
                                     </div>
