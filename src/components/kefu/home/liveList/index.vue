@@ -3,47 +3,34 @@
         <div class="top">
             <div class="searchTop">
                 <div>
+                    <el-col :span="16">
+                        <el-select style="width: 100%" v-model="currentType" placeholder="请选择分组">
+                            <el-option
+                                    v-for="item in groupList"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-col>
+                    <el-col :span="2" style="margin-left: 5px">
+                        <div class="grid-content bg-purple">
+                            <button class="btnSearch" @click="query('group_id')">类别</button>
+                        </div>
+                    </el-col>
+                </div>
+                <div>
                     <el-col :span="6" style="line-height: 40px;text-align: center">
-                        客服名称
+                        搜索直播
                     </el-col>
                     <el-col :span="10">
                         <div class="grid-content bg-purple">
-                            <el-input :span="4" v-model="usernameQuery" placeholder="请输入客服名称"></el-input>
+                            <el-input :span="4" v-model="usernameQuery" placeholder="请输入"></el-input>
                         </div>
                     </el-col>
                     <el-col :span="2" style="margin-left: 5px">
                         <div class="grid-content bg-purple">
                             <button class="btnSearch" type="primary" @click="query('username')">查询</button>
-                        </div>
-                    </el-col>
-                </div>
-                <div>
-                    <el-col :span="6" style="line-height: 40px;text-align: center">
-                        客服编号
-                    </el-col>
-                    <el-col :span="10">
-                        <div class="grid-content bg-purple">
-                            <el-input :span="4" v-model="noQuery" placeholder="请输入客服编号"></el-input>
-                        </div>
-                    </el-col>
-                    <el-col :span="2" style="margin-left: 5px">
-                        <div class="grid-content bg-purple">
-                            <button class="btnSearch" type="primary" @click="query('no')">查询</button>
-                        </div>
-                    </el-col>
-                </div>
-                <div>
-                    <el-col :span="4">
-                        <div class="block">
-                            <el-date-picker
-                                    v-model="value2"
-                                    type="datetimerange"
-                                    :picker-options="pickerOptions"
-                                    range-separator="至"
-                                    start-placeholder="开始日期"
-                                    end-placeholder="结束日期"
-                                    align="right">
-                            </el-date-picker>
                         </div>
                     </el-col>
                 </div>
@@ -58,7 +45,7 @@
                     :data="tableData" border
                     style="width: 100%">
                 <el-table-column type="index" label="序号" width="50"></el-table-column>
-                <el-table-column prop="avatar" label="头像" width="60">
+                <el-table-column prop="avatar" label="球队logo" width="160">
                     <template slot-scope="scope">
                         <el-image
                                 style="max-width: 32px;max-height: 32px"
@@ -67,27 +54,8 @@
                         </el-image>
                     </template>
                 </el-table-column>
-                <el-table-column prop="username" label="用户名"></el-table-column>
-                <el-table-column prop="nick_name" label="客服昵称"></el-table-column>
-                <el-table-column prop="customer_no" label="客服编号"></el-table-column>
-                <el-table-column prop="group_name" label="组别 ↓"></el-table-column>
-                <el-table-column prop="create_time" label="创建时间"></el-table-column>
-                <el-table-column prop="djrs" label="对接人数"></el-table-column>
-                <el-table-column label="好评数">
-                    <template slot-scope="scope">
-                        <span :style="Number(scope.row.hps) > 0 ? fontColor.hp : ''">{{ scope.row.hps }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="差评数">
-                    <template slot-scope="scope">
-                        <span :style="scope.row.cps > 0 ? fontColor.cp : ''">{{ scope.row.cps }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="投诉数">
-                    <template slot-scope="scope">
-                        <span :style="scope.row.tss > 0 ? fontColor.ts : ''">{{ scope.row.tss }}</span>
-                    </template>
-                </el-table-column>
+                <el-table-column prop="username" label="球队简称"></el-table-column>
+                <el-table-column prop="create_time" label="开赛时间"></el-table-column>
                 <el-table-column prop="opt" label="操作">
                     <template slot-scope="scope">
                         <button
@@ -106,29 +74,24 @@
                     :data="tableDataDetail"
                     style="width: 100%">
                 <el-table-column prop="day_time" label="时间"></el-table-column>
-                <!--                <el-table-column prop="avatar" label="头像">-->
-                <!--                    <template slot-scope="scope">-->
-                <!--                        <img style="width: 90%;height: 90%;display:block;margin: auto" :src="scope.row.avatar" alt="">-->
-                <!--                    </template>-->
-                <!--                </el-table-column>-->
-                <el-table-column prop="nick_name" label="客服名称"></el-table-column>
-                <el-table-column prop="customer_no" label="客服编号"></el-table-column>
+                <el-table-column prop="nick_name" label="赛事名称"></el-table-column>
+                <el-table-column prop="customer_no" label="赛事编号"></el-table-column>
                 <el-table-column prop="group_name" label="组别 ↓"></el-table-column>
                 <el-table-column prop="create_time" label="创建时间"></el-table-column>
                 <el-table-column prop="djrs" label="对接人数"></el-table-column>
                 <el-table-column label="好评数">
                     <template slot-scope="scope">
-                        <span :style="Number(scope.row.hps) > 0 ? fontColor.hp : ''">{{ scope.row.hps }}</span>
+                        <span :style="Number(scope.row.hps) > 0 ? fontColor.hp : ''">{{scope.row.hps}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="差评数">
                     <template slot-scope="scope">
-                        <span :style="scope.row.cps > 0 ? fontColor.cp : ''">{{ scope.row.cps }}</span>
+                        <span :style="scope.row.cps > 0 ? fontColor.cp : ''">{{scope.row.cps}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="投诉数">
                     <template slot-scope="scope">
-                        <span :style="scope.row.tss > 0 ? fontColor.ts : ''">{{ scope.row.tss }}</span>
+                        <span :style="scope.row.tss > 0 ? fontColor.ts : ''">{{scope.row.tss}}</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -197,6 +160,13 @@
                         }
                     }]
                 },
+                currentType: "全部",
+                groupList: [
+                    {id: 1, name: '全部'},
+                    {id: 2, name: '足球'},
+                    {id: 3, name: '篮球'},
+                    {id: 4, name: '其他'},
+                ],
                 value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
             }
         },
@@ -238,7 +208,7 @@
                 }).then(res => {
                     if (res.data.code === 20000) {
                         this.tableDataDetail = JSON.parse(JSON.stringify(res.data.data))
-                        this.groupDetail = "客服统计【" + this.tableDataDetail[0].customer_no + '】'
+                        this.groupDetail = "赛事统计【" + this.tableDataDetail[0].customer_no + '】'
                     }
                     this.loadingPop = false
                 }).catch(err => {

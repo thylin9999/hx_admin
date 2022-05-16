@@ -10,7 +10,7 @@
             <el-table-column prop="username" label="管理员账号"></el-table-column>
             <el-table-column prop="create_time" label="创建时间"></el-table-column>
             <el-table-column prop="last_time" label="登录时间"></el-table-column>
-             <el-table-column prop="last_ip" label="登录ip"></el-table-column>
+            <el-table-column prop="last_ip" label="登录ip"></el-table-column>
             <el-table-column prop="status" label="状态">
                 <template slot-scope="scope">
                     <div class="circle" :class="scope.row.status == 1 ?  'circleGreen' : 'circleRed'"></div>
@@ -68,6 +68,7 @@
 
 <script>
     export default {
+        name: 'adminList',
         props: {
             adminInfo: {
                 type: Object,

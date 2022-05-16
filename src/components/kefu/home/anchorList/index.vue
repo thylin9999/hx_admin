@@ -1,10 +1,25 @@
 <template>
     <div id="customerList">
         <div class="topBtnList">
-            <button class="btnEdit" @click="optionList('forbid')">批量禁用</button>
-            <button class="btnEdit" @click="optionList('open')">批量解除</button>
-            <button class="btnEdit" @click="toggleSelection()">取消已选</button>
-            <button class="btnAdd" @click="addCustomer">新增会员</button>
+<!--            <div style="float: left;margin-top: 22px">-->
+<!--                <el-col :span="6" style="line-height: 40px;text-align: center">-->
+<!--                    主播账号-->
+<!--                </el-col>-->
+<!--                <el-col :span="10">-->
+<!--                    <div class="grid-content bg-purple">-->
+<!--                        <el-input :span="4" placeholder="请输入客服名称"></el-input>-->
+<!--                    </div>-->
+<!--                </el-col>-->
+<!--                <el-col :span="2" style="margin-left: 5px">-->
+<!--                    <div class="grid-content bg-purple">-->
+<!--                        <button class="btnSearch" type="primary" @click="query('username')">查询</button>-->
+<!--                    </div>-->
+<!--                </el-col>-->
+<!--            </div>-->
+<!--            <button class="btnEdit" @click="optionList('forbid')">批量禁用</button>-->
+<!--            <button class="btnEdit" @click="optionList('open')">批量解除</button>-->
+<!--            <button class="btnEdit" @click="toggleSelection()">取消已选</button>-->
+            <button class="btnAdd" @click="addCustomer">新增主播</button>
         </div>
         <el-table
                 :cell-style="setSellStyle"
@@ -16,7 +31,7 @@
                 style="width: 100%">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column type="index" label="序号"></el-table-column>
-            <el-table-column prop="username" label="会员账号"></el-table-column>
+            <el-table-column prop="username" label="主播账号"></el-table-column>
             <el-table-column prop="avatar" label="头像">
                 <template slot-scope="scope">
                     <el-image
@@ -26,7 +41,7 @@
                     </el-image>
                 </template>
             </el-table-column>
-            <el-table-column prop="nick_name" label="会员昵称"></el-table-column>
+            <el-table-column prop="nick_name" label="主播昵称"></el-table-column>
             <el-table-column prop="create_time" label="创建时间"></el-table-column>
             <el-table-column prop="isForbid" label="是否禁用">
                 <template slot-scope="scope">
@@ -50,11 +65,11 @@
         </el-table>
         <el-dialog :title="isEditOrAddL" :visible.sync="dialogFormVisible" width="35%">
             <el-form :model="form">
-                <el-form-item label="会员账号" :label-width="formLabelWidth">
+                <el-form-item label="主播账号" :label-width="formLabelWidth">
                     <el-input :disabled="popupType === 'editCustomer'" v-model="form.account"
                               autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="会员昵称" :label-width="formLabelWidth">
+                <el-form-item label="主播昵称" :label-width="formLabelWidth">
                     <el-input v-model="form.nickname" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="popupType === 'addCustomer'" label="登录密码" :label-width="formLabelWidth">
@@ -115,8 +130,8 @@
                 formLabelWidth: '100px',
                 multipleSelection: [],
                 tableData: [],
-                isEditOrAddL: "新增会员",
-                topList: [{title: "会员列表", path: ""}]
+                isEditOrAddL: "新增主播",
+                topList: [{title: "主播列表", path: ""}]
             }
         },
         watch: {
@@ -150,12 +165,12 @@
                 this.selectList = val
             },
             addCustomer() {
-                this.isEditOrAddL = "新增会员"
+                this.isEditOrAddL = "新增主播"
                 this.dialogFormVisible = true
                 this.popupType = "addCustomer"
             },
             handleEdit(index, row) {
-                this.isEditOrAddL = "编辑会员"
+                this.isEditOrAddL = "编辑主播"
                 this.dialogFormVisible = true
                 this.popupType = "editCustomer"
                 this.form = {
@@ -172,7 +187,7 @@
                 }
             },
             handleDelete(index, row) {
-                this.$confirm(`此操作将永久删除会员【${row.username}】, 是否继续?`, '提示', {
+                this.$confirm(`此操作将永久删除主播【${row.username}】, 是否继续?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'

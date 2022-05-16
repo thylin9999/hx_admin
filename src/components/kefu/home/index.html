@@ -7,7 +7,7 @@
                         <el-col style="padding-top: 20px">
                             <el-menu :default-active="defaultIndex" class="el-menu-vertical-demo"
                                      background-color="#000" text-color="#fff">
-                                <el-menu-item :index="''+i" v-for="(item,i) in leftlist" :key="i"
+                                <el-menu-item :index="''+i" v-for="(item,i) in leftList" :key="i"
                                               :disabled="item.path == 'top'" @click="leftSelect(item)">
                                     <img class="logo" v-if="item.path == 'top'" :src="logo"/>
                                     <div v-else v-show="i == index"
@@ -23,7 +23,7 @@
             <el-container style="background-color: #f6f6f6">
                 <el-header class="hradTxt">
                     <div class="top_title">
-                        {{leftlist[index].title}}
+                        {{leftList[index].title}}
                     </div>
                     <div v-if="page == 'home'" class="username" style="float: right">
                         管理员账号:
@@ -34,73 +34,28 @@
                 <el-main>
                     <div class="box" style="height:100%">
                         <div class="visitData" v-if="page === 'home'">
-                            <div class="visitNum">
-                                <el-table v-loading="loading" element-loading-text="" :data="tableHome"
-                                          style="width: 100%">
-                                    <el-table-column prop="today" label="今日访问" align="center"></el-table-column>
-                                    <el-table-column prop="yesterday" label="昨日访问" align="center"></el-table-column>
-                                    <el-table-column prop="week" label="本周访问" align="center"></el-table-column>
-                                    <el-table-column prop="lastWeek" label="上周访问" align="center"></el-table-column>
-                                    <el-table-column prop="this_month" label="本月访问" align="center"></el-table-column>
-                                    <el-table-column prop="last_month" label="上月访问" align="center"></el-table-column>
-                                </el-table>
-                                <el-table v-loading="loading" element-loading-text="" :data="tableHomeMessage"
-                                          style="width: 100%">
-                                    <el-table-column prop="today" label="今日发言" align="center"></el-table-column>
-                                    <el-table-column prop="yesterday" label="昨日发言" align="center"></el-table-column>
-                                    <el-table-column prop="week" label="本周发言" align="center"></el-table-column>
-                                    <el-table-column prop="lastWeek" label="上周发言" align="center"></el-table-column>
-                                    <el-table-column prop="this_month" label="本月发言" align="center"></el-table-column>
-                                    <el-table-column prop="last_month" label="上月发言" align="center"></el-table-column>
-                                </el-table>
-                                <!--                                <img :src="imgUrl" alt="">-->
-                            </div>
-                            <!--                            <div class="speakNum">-->
-                            <!--                                <el-table v-loading="loading" element-loading-text="" :data="todaySpeak"-->
-                            <!--                                    style="width: 100%">-->
-                            <!--                                    <el-table-column prop="jrfy" label="今日发言人数"></el-table-column>-->
-                            <!--                                </el-table>-->
-                            <!--                                <img :src="imgUrl" alt="">-->
-                            <!--                            </div>-->
-                            <div class="waitDeal">
-                                <div class="waitTxt">待处理</div>
-                                <el-table :data="wailDealList" style="width: 100%">
-                                    <el-table-column prop="today" label="投诉">
-                                        <template slot-scope="scope">
-                                            <p style="color:#ef1a30" class="waitDealT" @click="goWaitDeal('c')">
-                                                {{scope.row.dclts}}</p>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="today" label="建议">
-                                        <template slot-scope="scope">
-                                            <p style="color: #0fc176" class="waitDealT" @click="goWaitDeal('s')">
-                                                {{scope.row.dcljy}}</p>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                                <img :src="imgUrl" alt="">
-                            </div>
+                            首页模块预留
                         </div>
                         <template v-else-if="page === 'adminList'">
                             <AdminList :adminInfo="adminInfo"></AdminList>
                         </template>
-                        <template v-else-if="page === 'customerList'">
-                            <CustomerList :groupList="groupList" :adminInfo="adminInfo"></CustomerList>
+                        <template v-else-if="page === 'anchorList'">
+                            <AnchorList :adminInfo="adminInfo"></AnchorList>
                         </template>
-                        <template v-else-if="page === 'kefuSensus'">
-                            <KefuSensus :groupList="groupList" :adminInfo="adminInfo"></KefuSensus>
+                        <template v-else-if="page === 'memberList'">
+                            <MemberList :groupList="groupList" :adminInfo="adminInfo"></MemberList>
                         </template>
-                        <template v-else-if="page === 'commonQuestions'">
-                            <CommonQuestions :adminInfo="adminInfo"></CommonQuestions>
+                        <template v-else-if="page === 'matchList'">
+                            <MatchList :groupList="groupList" :adminInfo="adminInfo"></MatchList>
                         </template>
-                        <template v-else-if="page === 'complainList'">
-                            <ComplainList :groupList="groupList" :adminInfo="adminInfo"></ComplainList>
+                        <template v-else-if="page === 'liveList'">
+                            <LiveList :adminInfo="adminInfo"></LiveList>
                         </template>
-                        <template v-else-if="page === 'suggestList'">
-                            <SuggestList :groupList="groupList" :adminInfo="adminInfo"></SuggestList>
+                        <template v-else-if="page === 'contentManage'">
+                            <ContentManage :adminInfo="adminInfo"></ContentManage>
                         </template>
-                        <template v-else-if="page === 'messageManage'">
-                            <MessageManage :adminInfo="adminInfo"></MessageManage>
+                        <template v-else-if="page === 'feedbackManage'">
+                            <FeedbackManage :groupList="groupList" :adminInfo="adminInfo"></FeedbackManage>
                         </template>
                     </div>
                 </el-main>

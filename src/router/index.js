@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from "../components/login/index"
 import Home from "../components/kefu/home/index"
+import AdminList from "../components/kefu/home/adminList/index"
 
 Vue.use(VueRouter)
 

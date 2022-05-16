@@ -14,9 +14,7 @@
             <el-table-column type="index" label="序号" width="100"></el-table-column>
             <el-table-column sortable prop="sort" label="排序" width="100"></el-table-column>
             <el-table-column prop="title" label="标题" width="150"></el-table-column>
-            <el-table-column prop="djrs" label="点击次数" width="100"></el-table-column>
-            <el-table-column prop="zsrs" label="真实人数" width="100"></el-table-column>
-            <el-table-column prop="content" label="自动回复">
+            <el-table-column prop="content" label="是否投入使用">
                 <template slot-scope="scope">
                     <el-switch
                             active-color="#ff4600"
@@ -41,7 +39,7 @@
                 <el-row :gutter="20">
                     <el-col :span="8">
                         <div class="grid-content bg-purple">
-                            <el-form-item label="常见问题">
+                            <el-form-item label="内容配置">
                                 <el-input v-model="form.title" autocomplete="off" placeholder="请输入问题"></el-input>
                             </el-form-item>
                         </div>
@@ -55,7 +53,7 @@
                     </el-col>
                     <el-col :span="8">
                         <div class="grid-content bg-purple">
-                            <el-form-item label="自动回复">
+                            <el-form-item label="是否开启">
                                 <el-switch
                                         style="margin-left: 50px"
                                         active-color="#ff4600"

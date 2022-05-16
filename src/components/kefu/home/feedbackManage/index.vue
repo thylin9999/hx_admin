@@ -8,10 +8,9 @@
                 style="width: 100%">
             <el-table-column type="index" label="序号"></el-table-column>
             <el-table-column prop="create_time" label="时间"></el-table-column>
-            <el-table-column prop="content" label="建议信息"></el-table-column>
+            <el-table-column prop="title" label="标题"></el-table-column>
             <el-table-column prop="accept" label="是否受理"></el-table-column>
             <el-table-column prop="admin_name" label="操作人"></el-table-column>
-            <el-table-column prop="group_name" label="受理组"></el-table-column>
             <el-table-column prop="opt" label="操作">
                 <template slot-scope="scope">
                     <button
@@ -22,29 +21,26 @@
             </el-table-column>
         </el-table>
 
-
         <el-dialog :title="isEditOrAddL" :visible.sync="dialogFormVisible" width="35%">
             <el-form :model="form">
-                <el-form-item label="建议内容" :label-width="formLabelWidth">
-                    <el-input disabled type="textarea" v-model="form.content" aria-placeholder="填写投诉内容"></el-input>
+                <el-form-item label="类型" :label-width="formLabelWidth">
+                    <el-input disabled v-model="form.type_name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="反馈内容" :label-width="formLabelWidth">
+                    <el-input disabled type="textarea" v-model="form.content" aria-placeholder="填写反馈内容"></el-input>
                 </el-form-item>
                 <el-form-item label="" v-if="form.content_url" :label-width="formLabelWidth">
-                    <div class="popImg" style="display: inline-block">
+                    <div class="popImg" style="vertical-align: bottom">
                         <el-image
                                 style="width: 100px; height: 100px"
                                 :src="form.content_url"
                                 :preview-src-list="[form.content_url,form.content_url]">
                         </el-image>
                     </div>
+
                 </el-form-item>
                 <el-form-item label="联系方式" :label-width="formLabelWidth">
                     <el-input disabled v-model="form.phone" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="受理组" :label-width="formLabelWidth">
-                    <el-select v-model="form.group_id" disabled>
-                        <el-option v-for="(item,i) in groupList" :label="item.group_name" :value="item.id"
-                                   :key="i"></el-option>
-                    </el-select>
                 </el-form-item>
                 <el-form-item label="是否受理" :label-width="formLabelWidth">
                     <el-switch
@@ -69,6 +65,7 @@
 
 </template>
 
+
 <script>
     export default {
         props: {
@@ -89,9 +86,7 @@
         data() {
             return {
                 loading: true,
-                listData: [],
                 switchValue: false,
-                // isImgSee: false,
                 fileList: [],
                 value: true,
                 dialogTableVisible: false,
@@ -100,7 +95,7 @@
                 formLabelWidth: '100px',
                 multipleSelection: [],
                 tableData: [],
-                isEditOrAddL: "详情/编辑",
+                isEditOrAddL: "编辑",
                 topList: [{title: "客服列表", path: ""}],
                 currentId: '',
             }
@@ -115,14 +110,13 @@
         },
         methods: {
             init() {
-                this.suggestList()
-            },
-            seeImg() {
-                this.isImgSee = !this.isImgSee
+                this.getQuestionList()
             },
             handleEdit(index, row) {
-                this.isEditOrAddL = `建议详情 【${row.customer_no}】`
+                this.isEditOrAddL = `投诉详情 【${row.customer_no}】`
                 this.dialogFormVisible = true
+                this.form.customer_no = this.listData[index].customer_no
+                this.form.type_name = this.listData[index].type_name
                 this.form.content = this.listData[index].content
                 this.form.content_url = this.listData[index].content_url
                 this.form.phone = this.listData[index].phone
@@ -151,7 +145,7 @@
                 }).then(res => {
                     if (res.data.code == 20000) {
                         this.tableData = []
-                        this.suggestList()
+                        this.getQuestionList()
                         this.dialogFormVisible = false
                         this.$message.success('操作成功');
                     } else {
@@ -161,10 +155,10 @@
                     this.$message.error('操作失败');
                 })
             },
-            suggestList() {
+            getQuestionList() {
                 this.loading = true
                 this.axios({
-                    url: `${apiUrl}/admin/feedback/suggestList`,
+                    url: `${apiUrl}/admin/feedback/lists`,
                     method: 'post',
                     data: {
                         token: this.adminInfo.token,
@@ -177,7 +171,9 @@
                             this.tableData.push(
                                 {
                                     create_time: item.create_time,
-                                    content: this.dialogFormVisible ? item.content : item.content.slice(0, 10) + '...',
+                                    customer_no: item.customer_no,
+                                    type_name: item.type_name,
+                                    title: item.title,
                                     accept: item.accept == 1 ? "否" : "是",  //是否受理 1未受理 2已受理 3忽略', 默认 1未受理
                                     admin_name: item.admin_name,//'编辑/操作',
                                     group_name: item.group_name
