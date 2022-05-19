@@ -16,9 +16,9 @@
 <!--                    </div>-->
 <!--                </el-col>-->
 <!--            </div>-->
-<!--            <button class="btnEdit" @click="optionList('forbid')">批量禁用</button>-->
-<!--            <button class="btnEdit" @click="optionList('open')">批量解除</button>-->
-<!--            <button class="btnEdit" @click="toggleSelection()">取消已选</button>-->
+            <button class="btnEdit" @click="optionList('forbid')">禁用</button>
+            <button class="btnEdit" @click="optionList('open')">解除</button>
+            <button class="btnEdit" @click="toggleSelection()">取消已选</button>
             <button class="btnAdd" @click="addCustomer">新增主播</button>
         </div>
         <el-table

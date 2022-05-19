@@ -25,34 +25,10 @@
                     spinner: 'el-icon-loading',
                     background: 'rgba(0, 0, 0, 0.7)'
                 });
-                try {
-                    let {data} = await login()
-                    console.log(data)
-                    if (data.code === statusCode.success) {
-                        this.$message({
-                            message: '登录成功',
-                            type: 'success',
-                            duration: 1000
-                        });
-                        setTimeout(() => {
-                            this.$router.push({name: 'Home'})
-                        }, 500)
-                    }
-                    loading.close();
-                } catch (e) {
-                    console.log('error---error')
-                }
-
-                // this.axios({
-                //     url: `${apiUrl}/admin/login/Login`,
-                //     method: "post",
-                //     data: {
-                //         username: this.username,
-                //         password: this.password
-                //     }
-                // }).then(res => {
-                //     if (res.data.code == 20000) {
-                //         localStorage.setItem("adminInfo", JSON.stringify(res.data))
+                // try {
+                //     let {data} = await login()
+                //     console.log(data)
+                //     if (data.code === statusCode.success) {
                 //         this.$message({
                 //             message: '登录成功',
                 //             type: 'success',
@@ -61,14 +37,38 @@
                 //         setTimeout(() => {
                 //             this.$router.push({name: 'Home'})
                 //         }, 500)
-                //     } else {
-                //         this.$message.error(res.data.msg);
                 //     }
                 //     loading.close();
-                // }).catch(err => {
-                //     this.$message.error('登录失败');
-                //     loading.close();
-                // })
+                // } catch (e) {
+                //     console.log('error---error')
+                // }
+
+                this.axios({
+                    url: `${apiUrl}/admin/login/Login`,
+                    method: "post",
+                    data: {
+                        username: this.username,
+                        password: this.password
+                    }
+                }).then(res => {
+                    if (res.data.code == 20000) {
+                        localStorage.setItem("adminInfo", JSON.stringify(res.data))
+                        this.$message({
+                            message: '登录成功',
+                            type: 'success',
+                            duration: 1000
+                        });
+                        setTimeout(() => {
+                            this.$router.push({name: 'Home'})
+                        }, 500)
+                    } else {
+                        this.$message.error(res.data.msg);
+                    }
+                    loading.close();
+                }).catch(err => {
+                    this.$message.error('登录失败');
+                    loading.close();
+                })
 
 
             }

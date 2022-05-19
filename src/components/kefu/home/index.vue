@@ -7,6 +7,7 @@
     import MatchList from "./matchList/index"
     import LiveList from "./liveList/index"
     import ContentManage from "./contentManage/index"
+    import AdvManage from "./advList"
     import FeedbackManage from "./feedbackManage/index"
 
     export default {
@@ -17,6 +18,7 @@
             MatchList,
             LiveList,
             ContentManage,
+            AdvManage,
             FeedbackManage,
         },
         name: "Home",
@@ -35,7 +37,9 @@
                     {title: "赛事管理", path: "matchList", index: 5},
                     {title: "直播管理", path: "liveList", index: 6},
                     {title: "内容管理", path: "contentManage", index: 7},
-                    {title: "用户反馈管理", path: "feedbackManage", index: 8},
+                    {title: "广告管理", path: "advManage", index: 8},
+                    {title: "网站配置", path: "webSet", index: 9},
+                    {title: "用户反馈管理", path: "feedbackManage", index: 10},
                     // {title: "消息管理", path: "messageManage", index: 9},
                 ],
                 topList: [{title: "首页", path: ""}],

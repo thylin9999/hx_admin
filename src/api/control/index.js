@@ -11,3 +11,24 @@ export function home(t) {   //首页数据
     })
 }
 
+export function getAdminList(token, uid) { //管理员列表
+    return request({
+        method: 'post',
+        url: url.adminList,
+        params: {
+            token,
+            uid
+        }
+    })
+}
+
+export function getAdvList(t) {  //广告列表
+    return request({
+        method: 'post',
+        url: url.advList,
+        params: {
+            t
+        }
+    })
+}
+

@@ -1,7 +1,7 @@
 import Mock from "mockjs";
 
-import {statusCode} from "../../util/statusCode";
-import url from "../../api/user/url";
+import {statusCode} from "@/util/statusCode";
+import url from "@/api/user/url";
 
 const login = config => {
     return Mock.mock({
@@ -19,7 +19,6 @@ const userInfo = config => {
         }
     })
 }
-
 
 Mock.mock(url.login, 'post', login)
 Mock.mock(url.userInfo, 'post', userInfo)
