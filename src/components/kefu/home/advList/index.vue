@@ -8,7 +8,7 @@
                   style="width: 100%">
             <el-table-column type="index" label="序号"></el-table-column>
             <el-table-column prop="title" label="广告标题"></el-table-column>
-            <el-table-column prop="avatar" label="广告图片">
+            <el-table-column prop="pic" label="广告图片">
                 <template slot-scope="scope">
                     <el-image
                             style="max-width: 32px;max-height: 32px"
@@ -19,6 +19,7 @@
             </el-table-column>
             <el-table-column prop="equipment" label="设备"></el-table-column>
             <el-table-column prop="linkType" label="跳转方式"></el-table-column>
+            <el-table-column prop="linkAddress" label="跳转地址"></el-table-column>
             <el-table-column prop="createMan" label="创建人"></el-table-column>
             <el-table-column prop="lastTimeOpt" label="上次操作时间"></el-table-column>
             <el-table-column prop="remark" label="备注"></el-table-column>
@@ -29,40 +30,49 @@
                 </template>
             </el-table-column>
             <el-table-column prop="optMan" label="操作人"></el-table-column>
-            <el-table-column prop="opt" label="操作">
+            <el-table-column label="操作">
                 <template slot-scope="scope">
                     <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)" type="text">编辑</button>
                     <button class="btnDel" @click="handleDelete(scope.$index, scope.row)">删除</button>
                 </template>
             </el-table-column>
         </el-table>
-        <el-dialog :title="isEditTxt" :visible.sync="dialogFormVisible">
-            <el-form :model="form">
-                <el-form-item label="标题">
-                    <el-input disabled v-model="form.username"></el-input>
+        <el-dialog title="新增/编辑 广告" :visible.sync="dialog" width="20%">
+            <el-form ref="formItem" :model="formItem" label-width="80px">
+                <el-form-item label="广告标题">
+                    <el-input v-model="formItem.title"></el-input>
+                </el-form-item>
+                <el-form-item label="广告图片">
+                    <el-input v-model="formItem.pic"></el-input>
+                </el-form-item>
+                <el-form-item label="设备">
+                    <el-select v-model="formItem.equipment" placeholder="请选择活动区域">
+                        <el-option label="PC" value="PC"></el-option>
+                        <el-option label="H5" value="H5"></el-option>
+                        <el-option label="Android" value="Android1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="状态">
+                    <el-switch v-model="formItem.status"></el-switch>
+                </el-form-item>
+                <el-form-item label="跳转方式">
+                    <el-radio-group v-model="formItem.linkType">
+                        <el-radio label="1">内跳</el-radio>
+                        <el-radio label="2">外跳</el-radio>
+                        <el-radio label="3">不跳</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="跳转地址">
+                    <el-input v-model="formItem.linkAddress"></el-input>
+                </el-form-item>
+                <el-form-item label="备注">
+                    <el-input type="textarea" v-model="formItem.remark"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit">提交</el-button>
+                    <el-button @click="dialog = false">取消</el-button>
                 </el-form-item>
             </el-form>
-            <el-switch v-if="!isComAdminPop" v-model="value" active-text="开启" inactive-text="禁用" active-color="#409EFF"
-                       inactive-color="#DCDFE6">
-            </el-switch>
-            <div slot="footer" class="dialog-footer">
-                <button class="btnCancle" @click="dialogFormVisible = false">取 消</button>
-                <button class="btnSubmit" @click="submit">提 交</button>
-            </div>
-        </el-dialog>
-        <el-dialog title="新增广告" :visible.sync="addDialog" width="20%">
-            <el-form :model="formAddAdmin">
-                <el-form-item label="标题">
-                    <el-input v-model="formAddAdmin.name" placeholder="广告账号"></el-input>
-                </el-form-item>
-                <el-form-item label="作用域">
-                    <el-input v-model="formAddAdmin.password" placeholder="广告密码"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <button class="btnCancle" @click="addDialog = false">取 消</button>
-                <button class="btnSubmit" type="primary" @click="submit('addAdmin')">提 交</button>
-            </div>
         </el-dialog>
     </div>
 </template>
@@ -84,74 +94,26 @@
         data() {
             return {
                 loading: true,
-                fileList: [],
-                value: true,
-                form: {},
                 tableData: [],
                 isEditTxt: "详情/编辑",
                 currentId: '',
-                dialogFormVisible: false,
-                isComAdminPop: false,
-                addAdminDialog: false,
-                addDialog: false,
-                formAddAdmin: {
-                    name: '',
-                    password: '',
-                },
+                dialog: false,
+                formItem: {
+                    title: '',
+                    pic: '',
+                    equipment: '',
+                    linkType: '',
+                    linkAddress: '',
+                    remark: '',
+                    status: false,
+                }
             }
         },
         created() {
             this.init()
         },
         methods: {
-            init() {
-                this.getAdmin()
-            },
-            addAdmin() {
-                this.addDialog = true
-            },
-            setSellStyle({row, column, rowIndex, columnIndex}) {
-                if (columnIndex == 0) return "borderRadius: 10px  0 0 10px"
-                if (columnIndex == 7) return "borderRadius: 0  10px 10px 0"
-            },
-            handleEdit(index, row) {
-                this.value = row.status == '1' ? true : false
-                this.isEditTxt = "编辑广告"
-                this.dialogFormVisible = true
-                this.currentId = this.tableData[index].id
-                this.form.username = row.username
-                if (this.adminInfo.data.username != 'admin' && this.adminInfo.data.id == row.id) this.isComAdminPop = true//普通广告编辑自己
-            },
-            handleDelete(index, row) {
-                this.$confirm(`此操作将永久删除广告【${row.nick_name}】, 是否继续?`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.axios({
-                        url: `${apiUrl}/admin/admin/updateAdmin`,
-                        method: 'post',
-                        data: {
-                            token: this.adminInfo.token,
-                            uid: this.adminInfo.data.id,
-                            id: this.tableData[index].id,
-                            status: '3'
-                        }
-                    }).then(res => {
-                        if (res.data.code == 20000) {
-                            this.$message.success('删除成功');
-                            this.getAdminList()
-                        } else {
-                            this.$message(res.data.msg);
-                        }
-                    }).catch(err => {
-                        this.$message.error('删除失败');
-                    })
-                })
-            },
-            submit(type) {
-            },
-            async getAdmin() {
+            async init() {
                 this.loading = true
                 try {
                     let {data} = await getAdvList()
@@ -164,6 +126,57 @@
                     console.log('error--error')
                 }
             },
+            addAdmin() {
+                this.dialog = true
+            },
+            setSellStyle({row, column, rowIndex, columnIndex}) {
+                if (columnIndex == 0) return "borderRadius: 10px  0 0 10px"
+                if (columnIndex == 7) return "borderRadius: 0  10px 10px 0"
+            },
+            handleEdit(index, row) {
+                this.dialog = true
+
+                // this.value = row.status == '1' ? true : false
+                // this.isEditTxt = "编辑广告"
+                // this.dialogFormVisible = true
+                // this.currentId = this.tableData[index].id
+                // this.form.username = row.username
+                // if (this.adminInfo.data.username != 'admin' && this.adminInfo.data.id == row.id) this.isComAdminPop = true//普通广告编辑自己
+            },
+            handleDelete(index, row) {
+                this.$confirm(`此操作将永久删除广告【${row.nick_name}】, 是否继续?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    // this.axios({
+                    //     url: `${apiUrl}/admin/admin/updateAdmin`,
+                    //     method: 'post',
+                    //     data: {
+                    //         token: this.adminInfo.token,
+                    //         uid: this.adminInfo.data.id,
+                    //         id: this.tableData[index].id,
+                    //         status: '3'
+                    //     }
+                    // }).then(res => {
+                    //     if (res.data.code == 20000) {
+                    //         this.$message.success('删除成功');
+                    //         this.getAdminList()
+                    //     } else {
+                    //         this.$message(res.data.msg);
+                    //     }
+                    // }).catch(err => {
+                    //     this.$message.error('删除失败');
+                    // })
+                })
+            },
+            onSubmit(type) {
+                // this.dialog = false
+                console.log(this.formItem)
+            },
+            resetForm(formItem) {
+                this.$refs[formItem].resetFields();
+            }
         }
     }
 </script>
