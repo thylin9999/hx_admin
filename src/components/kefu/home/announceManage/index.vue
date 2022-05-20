@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-button style="float: right;border-radius: 10px;margin-bottom: 5px;background-color: #1f1d20;color: #fff"
-                   @click="dialog = true">新增开关+
+                   @click="dialog = true">新增公告+
         </el-button>
         <el-table :span="24" :row-style="{height:'58px'}" :header-row-style="{height:'40px'}"
                   v-loading="loading" ref="multipleTable" tooltip-effect="dark" :data="tableData" border
@@ -13,7 +13,7 @@
             <el-table-column prop="status" label="状态">
                 <template slot-scope="scope">
                     <div class="circle" :class="scope.row.status?  'circleGreen' : 'circleRed'"></div>
-                    {{scope.row.status ? '正常' : '禁用'}}
+                    {{scope.row.status ? '开启' : '关闭'}}
                 </template>
             </el-table-column>
             <el-table-column prop="createTime" label="创建时间"></el-table-column>
@@ -27,17 +27,16 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-dialog title="新增/编辑 开关" :visible.sync="dialog" width="20%">
+        <el-dialog title="新增/编辑 公告" :visible.sync="dialog" width="20%">
             <el-form ref="ruleForm" :model="formItem" label-width="80px">
                 <el-form-item label="标题">
                     <el-input v-model="formItem.title"></el-input>
                 </el-form-item>
-                <el-form-item label="名称">
-                    <el-input v-model="formItem.name"></el-input>
-                    <p style="color: red">备注：该字段为前端使用，切勿随意修改 </p>
-                </el-form-item>
                 <el-form-item label="说明">
                     <el-input type="textarea" v-model="formItem.remark"></el-input>
+                </el-form-item>
+                <el-form-item label="公告内容">
+                    <el-input type="textarea" v-model="formItem.content"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
                     <el-switch v-model="formItem.status"></el-switch>
@@ -53,7 +52,7 @@
 </template>
 
 <script>
-    import {getWebSet} from "@/api/control";
+    import {getAnnounce, getWebSet} from "@/api/control";
     import {statusCode} from "@/util/statusCode";
 
     export default {
@@ -75,9 +74,9 @@
                 dialog: false,
                 formItem: {
                     title: '',
-                    name: '',
                     status: false,
                     remark: '',
+                    content:''
                 }
             }
         },
@@ -88,7 +87,7 @@
             async init() {
                 this.loading = true
                 try {
-                    let {data} = await getWebSet()
+                    let {data} = await getAnnounce()
                     console.log(data)
                     if (data.code === statusCode.success) {
                         this.tableData = JSON.parse(JSON.stringify(data.data))
@@ -111,7 +110,7 @@
                 }
             },
             handleDelete(index, row) {
-                this.$confirm(`此操作将永久删除开关【${row.nick_name}】, 是否继续?`, '提示', {
+                this.$confirm(`此操作将永久删除公告【${row.title}】, 是否继续?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import AppAdmin from "./AppAdmin";
+import AppAdmin from "./App";
 import router from "./router"
 import "./mock"
 import "./style/index.css"

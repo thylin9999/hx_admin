@@ -38,7 +38,7 @@
             </el-table-column>
         </el-table>
         <el-dialog title="新增/编辑 广告" :visible.sync="dialog" width="20%">
-            <el-form ref="formItem" :model="formItem" label-width="80px">
+            <el-form ref="ruleForm" :model="formItem" label-width="80px">
                 <el-form-item label="广告标题">
                     <el-input v-model="formItem.title"></el-input>
                 </el-form-item>
@@ -71,6 +71,7 @@
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">提交</el-button>
                     <el-button @click="dialog = false">取消</el-button>
+                    <el-button @click="resetForm()">重置</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -135,13 +136,15 @@
             },
             handleEdit(index, row) {
                 this.dialog = true
-
-                // this.value = row.status == '1' ? true : false
-                // this.isEditTxt = "编辑广告"
-                // this.dialogFormVisible = true
-                // this.currentId = this.tableData[index].id
-                // this.form.username = row.username
-                // if (this.adminInfo.data.username != 'admin' && this.adminInfo.data.id == row.id) this.isComAdminPop = true//普通广告编辑自己
+                this.status = row.status
+                this.currentId = this.tableData[index].id
+                for (let k in row) {
+                    for (let key in this.formItem) {
+                        if (k === key) {
+                            this.formItem[key] = row[k]
+                        }
+                    }
+                }
             },
             handleDelete(index, row) {
                 this.$confirm(`此操作将永久删除广告【${row.nick_name}】, 是否继续?`, '提示', {
@@ -174,8 +177,10 @@
                 // this.dialog = false
                 console.log(this.formItem)
             },
-            resetForm(formItem) {
-                this.$refs[formItem].resetFields();
+            resetForm() {
+                for (let key in this.formItem) {
+                    if (typeof this.formItem[key] !== "boolean") this.formItem[key] = ''
+                }
             }
         }
     }

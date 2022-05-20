@@ -78,18 +78,18 @@
                 <el-table-column prop="customer_no" label="赛事编号"></el-table-column>
                 <el-table-column prop="group_name" label="组别 ↓"></el-table-column>
                 <el-table-column prop="create_time" label="创建时间"></el-table-column>
-                <el-table-column prop="djrs" label="对接人数"></el-table-column>
-                <el-table-column label="好评数">
+                <el-table-column prop="djrs" label="赛事统计"></el-table-column>
+                <el-table-column label="主队">
                     <template slot-scope="scope">
                         <span :style="Number(scope.row.hps) > 0 ? fontColor.hp : ''">{{scope.row.hps}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="差评数">
+                <el-table-column label="客队">
                     <template slot-scope="scope">
                         <span :style="scope.row.cps > 0 ? fontColor.cp : ''">{{scope.row.cps}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="投诉数">
+                <el-table-column label="联赛">
                     <template slot-scope="scope">
                         <span :style="scope.row.tss > 0 ? fontColor.ts : ''">{{scope.row.tss}}</span>
                     </template>

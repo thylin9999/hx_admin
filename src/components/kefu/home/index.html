@@ -57,6 +57,12 @@
                         <template v-else-if="page === 'advManage'">
                             <AdvManage :adminInfo="adminInfo"></AdvManage>
                         </template>
+                        <template v-else-if="page === 'announceManage'">
+                            <AnnounceManage :adminInfo="adminInfo"></AnnounceManage>
+                        </template>
+                        <template v-else-if="page=== 'webSet'">
+                            <WebSet :adminInfo="adminInfo"></WebSet>
+                        </template>
                         <template v-else-if="page === 'feedbackManage'">
                             <FeedbackManage :groupList="groupList" :adminInfo="adminInfo"></FeedbackManage>
                         </template>

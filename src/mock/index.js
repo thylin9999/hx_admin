@@ -4,5 +4,6 @@ if (process.env.VUE_APP_MOCK) {
     require('./modules/userInfo')
     require('./modules/adminList')
     require('./modules/advList')
-    // require('./modules/managerList')
+    require('./modules/webSet')
+    require('./modules/announceManage')
 }
