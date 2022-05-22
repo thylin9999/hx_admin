@@ -37,10 +37,10 @@
                             首页模块预留
                         </div>
                         <template v-else-if="page === 'adminList'">
-                            <AdminList :adminInfo="adminInfo"></AdminList>
+                            <AdminList></AdminList>
                         </template>
                         <template v-else-if="page === 'anchorList'">
-                            <AnchorList :adminInfo="adminInfo"></AnchorList>
+                            <AnchorList></AnchorList>
                         </template>
                         <template v-else-if="page === 'memberList'">
                             <MemberList :groupList="groupList" :adminInfo="adminInfo"></MemberList>
@@ -60,11 +60,11 @@
                         <template v-else-if="page === 'announceManage'">
                             <AnnounceManage :adminInfo="adminInfo"></AnnounceManage>
                         </template>
+                        <template v-else-if="page === 'feedbackManage'">
+                            <FeedbackManage :adminInfo="adminInfo"></FeedbackManage>
+                        </template>
                         <template v-else-if="page=== 'webSet'">
                             <WebSet :adminInfo="adminInfo"></WebSet>
-                        </template>
-                        <template v-else-if="page === 'feedbackManage'">
-                            <FeedbackManage :groupList="groupList" :adminInfo="adminInfo"></FeedbackManage>
                         </template>
                     </div>
                 </el-main>

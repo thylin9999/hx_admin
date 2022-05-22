@@ -22,6 +22,21 @@ export function getAdminList(token, uid) { //管理员列表
     })
 }
 
+export function getAnchorList() { //主播列表
+    return request({
+        method: 'post',
+        url: url.anchorList,
+        params: {}
+    })
+}
+export function getMemberList() { //主播列表
+    return request({
+        method: 'post',
+        url: url.memberList,
+        params: {}
+    })
+}
+
 export function getAdvList(t) {  //广告列表
     return request({
         method: 'post',
@@ -29,6 +44,22 @@ export function getAdvList(t) {  //广告列表
         params: {
             t
         }
+    })
+}
+
+export function getAnnounce() {  //公告管理
+    return request({
+        method: 'post',
+        url: url.announceManage,
+        params: {}
+    })
+}
+
+export function getFeedback() {  //用户反馈管理
+    return request({
+        method: 'post',
+        url: url.feedbackManage,
+        params: {}
     })
 }
 
@@ -40,12 +71,6 @@ export function getWebSet() {  //获取全局网站开关配置
     })
 }
 
-export function getAnnounce() {  //公告管理
-    return request({
-        method: 'post',
-        url: url.announceManage,
-        params: {}
-    })
-}
+
 
 

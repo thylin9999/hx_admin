@@ -7,10 +7,16 @@
                 :data="tableData" border
                 style="width: 100%">
             <el-table-column type="index" label="序号"></el-table-column>
-            <el-table-column prop="create_time" label="时间"></el-table-column>
+            <el-table-column prop="time" label="时间"></el-table-column>
             <el-table-column prop="title" label="标题"></el-table-column>
-            <el-table-column prop="accept" label="是否受理"></el-table-column>
-            <el-table-column prop="admin_name" label="操作人"></el-table-column>
+            <el-table-column prop="content" label="内容"></el-table-column>
+            <el-table-column prop="status" label="是否受理">
+                <template slot-scope="scope">
+                    <div class="circle" :class="scope.row.status ?  'circleGreen' : 'circleRed'"></div>
+                    {{scope.row.status ? '已受理' : '未受理'}}
+                </template>
+            </el-table-column>
+            <el-table-column prop="optMan" label="操作人"></el-table-column>
             <el-table-column prop="opt" label="操作">
                 <template slot-scope="scope">
                     <button
@@ -23,24 +29,11 @@
 
         <el-dialog :title="isEditOrAddL" :visible.sync="dialogFormVisible" width="35%">
             <el-form :model="form">
-                <el-form-item label="类型" :label-width="formLabelWidth">
-                    <el-input disabled v-model="form.type_name" autocomplete="off"></el-input>
+                <el-form-item label="反馈标题" :label-width="formLabelWidth">
+                    <el-input disabled type="input" v-model="form.title"></el-input>
                 </el-form-item>
                 <el-form-item label="反馈内容" :label-width="formLabelWidth">
-                    <el-input disabled type="textarea" v-model="form.content" aria-placeholder="填写反馈内容"></el-input>
-                </el-form-item>
-                <el-form-item label="" v-if="form.content_url" :label-width="formLabelWidth">
-                    <div class="popImg" style="vertical-align: bottom">
-                        <el-image
-                                style="width: 100px; height: 100px"
-                                :src="form.content_url"
-                                :preview-src-list="[form.content_url,form.content_url]">
-                        </el-image>
-                    </div>
-
-                </el-form-item>
-                <el-form-item label="联系方式" :label-width="formLabelWidth">
-                    <el-input disabled v-model="form.phone" autocomplete="off"></el-input>
+                    <el-input disabled type="textarea" v-model="form.content"></el-input>
                 </el-form-item>
                 <el-form-item label="是否受理" :label-width="formLabelWidth">
                     <el-switch
@@ -50,10 +43,9 @@
                             active-text="已经受理"
                             inactive-text="未受理">
                     </el-switch>
-                    <!--                    <el-input v-show="value" v-model="form.name" autocomplete="off"></el-input>-->
                 </el-form-item>
                 <el-form-item label="操作人" :label-width="formLabelWidth">
-                    <el-input disabled v-model="form.admin_name"></el-input>
+                    <el-input disabled v-model="form.optMan"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -67,6 +59,9 @@
 
 
 <script>
+    import {getFeedback} from "@/api/control";
+    import {statusCode} from "@/util/statusCode";
+
     export default {
         props: {
             adminInfo: {
@@ -75,28 +70,22 @@
                     return {}
                 }
             },
-            groupList: {
-                type: Array,
-                default: function () {
-                    return []
-                }
-            },
         },
         name: "",
         data() {
             return {
                 loading: true,
                 switchValue: false,
-                fileList: [],
-                value: true,
-                dialogTableVisible: false,
                 dialogFormVisible: false,
-                form: {},
+                form: {
+                    title: '',
+                    status: false,
+                    content: '',
+                    optMan: ""
+                },
                 formLabelWidth: '100px',
-                multipleSelection: [],
                 tableData: [],
                 isEditOrAddL: "编辑",
-                topList: [{title: "客服列表", path: ""}],
                 currentId: '',
             }
         },
@@ -109,88 +98,34 @@
             this.init()
         },
         methods: {
-            init() {
-                this.getQuestionList()
+            async init() {
+                this.loading = true
+                try {
+                    let {data} = await getFeedback()
+                    console.log(data)
+                    if (data.code === statusCode.success) {
+                        this.tableData = JSON.parse(JSON.stringify(data.data))
+                        this.loading = false
+                    }
+                } catch (e) {
+                    console.log('error--error')
+                }
             },
             handleEdit(index, row) {
-                this.isEditOrAddL = `投诉详情 【${row.customer_no}】`
                 this.dialogFormVisible = true
-                this.form.customer_no = this.listData[index].customer_no
-                this.form.type_name = this.listData[index].type_name
-                this.form.content = this.listData[index].content
-                this.form.content_url = this.listData[index].content_url
-                this.form.phone = this.listData[index].phone
-                this.form.group_id = this.listData[index].group_id
-                this.form.group_name = this.listData[index].group_name
-                this.form.accept = this.listData[index].accept
-                this.form.admin_name = this.listData[index].admin_name
-                this.currentId = this.listData[index].id
-                if (this.listData[index].accept == 2) {
-                    this.switchValue = true
-                }
-                if (this.listData[index].accept == 1) {
-                    this.switchValue = false
+                this.switchValue = row.status
+                this.currentId = this.tableData[index].id
+                for (let k in row) {
+                    for (let key in this.form) {
+                        if (k === key) {
+                            this.form[key] = row[k]
+                        }
+                    }
                 }
             },
             submit() {
-                this.axios({
-                    url: `${apiUrl}/admin/feedback/updateFeedback`,
-                    method: 'post',
-                    data: {
-                        token: this.adminInfo.token,
-                        uid: this.adminInfo.data.id,
-                        accept: this.switchValue ? "2" : "1",
-                        id: this.currentId,
-                    }
-                }).then(res => {
-                    if (res.data.code == 20000) {
-                        this.tableData = []
-                        this.getQuestionList()
-                        this.dialogFormVisible = false
-                        this.$message.success('操作成功');
-                    } else {
-                        this.$message.error(res.data.msg);
-                    }
-                }).catch(err => {
-                    this.$message.error('操作失败');
-                })
-            },
-            getQuestionList() {
-                this.loading = true
-                this.axios({
-                    url: `${apiUrl}/admin/feedback/lists`,
-                    method: 'post',
-                    data: {
-                        token: this.adminInfo.token,
-                        uid: this.adminInfo.data.id
-                    }
-                }).then(res => {
-                    if (res.data.code == 20000) {
-                        res.data.data.length && res.data.data.forEach((item, i) => {
-                            this.listData = JSON.parse(JSON.stringify(res.data.data))
-                            this.tableData.push(
-                                {
-                                    create_time: item.create_time,
-                                    customer_no: item.customer_no,
-                                    type_name: item.type_name,
-                                    title: item.title,
-                                    accept: item.accept == 1 ? "否" : "是",  //是否受理 1未受理 2已受理 3忽略', 默认 1未受理
-                                    admin_name: item.admin_name,//'编辑/操作',
-                                    group_name: item.group_name
-                                }
-                            )
-                        })
-                    } else {
-                        this.$message.error({message: res.data.msg, duration: 1000});
-                        if (res.data.code == '40008') {
-                            this.$router.push({path: '/'})
-                        }
-                    }
-                    this.loading = false
-                }).catch(err => {
-                    this.$message.error('数据获取失败');
-                    this.loading = false
-                })
+                console.log(this.currentId)
+                console.log(this.switchValue)
             },
         }
     }

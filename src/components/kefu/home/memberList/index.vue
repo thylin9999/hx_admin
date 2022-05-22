@@ -1,25 +1,10 @@
 <template>
     <div id="customerList">
         <div class="topBtnList">
-            <div style="float: left;margin-top: 22px">
-                <el-col :span="6" style="line-height: 40px;text-align: center">
-                    客服名称
-                </el-col>
-                <el-col :span="10">
-                    <div class="grid-content bg-purple">
-                        <el-input :span="4" placeholder="请输入客服名称"></el-input>
-                    </div>
-                </el-col>
-                <el-col :span="2" style="margin-left: 5px">
-                    <div class="grid-content bg-purple">
-                        <button class="btnSearch" type="primary" @click="query('username')">查询</button>
-                    </div>
-                </el-col>
-            </div>
-            <button class="btnEdit" @click="optionList('forbid')">批量禁用</button>
-            <button class="btnEdit" @click="optionList('open')">批量解除</button>
+            <button class="btnEdit" @click="optionList('forbid')">禁用</button>
+            <button class="btnEdit" @click="optionList('open')">解除</button>
             <button class="btnEdit" @click="toggleSelection()">取消已选</button>
-            <button class="btnAdd" @click="addCustomer">新增会员</button>
+            <button class="btnAdd" @click="addCustomer">新增</button>
         </div>
         <el-table
                 :cell-style="setSellStyle"
@@ -31,45 +16,37 @@
                 style="width: 100%">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column type="index" label="序号"></el-table-column>
-            <el-table-column prop="username" label="会员账号"></el-table-column>
-            <el-table-column prop="avatar" label="头像">
+            <el-table-column prop="account" label="账号"></el-table-column>
+            <el-table-column prop="pic" label="头像">
                 <template slot-scope="scope">
                     <el-image
                             style="max-width: 32px;max-height: 32px"
-                            :src="scope.row.avatar"
-                            :preview-src-list="[scope.row.avatar,scope.row.avatar]">
+                            :src="scope.row.pic"
+                            :preview-src-list="[scope.row.pic,scope.row.pic]">
                     </el-image>
                 </template>
             </el-table-column>
-            <el-table-column prop="nick_name" label="会员昵称"></el-table-column>
-            <el-table-column prop="create_time" label="创建时间"></el-table-column>
-            <el-table-column prop="isForbid" label="是否禁用">
+            <el-table-column prop="nickname" label="昵称"></el-table-column>
+            <el-table-column prop="createTime" label="创建时间"></el-table-column>
+            <el-table-column prop="status" label="状态">
                 <template slot-scope="scope">
-                    <div class="circle" :class="scope.row.status == 1 ?  'circleGreen' : 'circleRed'"></div>
-                    {{scope.row.status == '1' ? '否' : '是'}}
+                    <div class="circle" :class="scope.row.status ?  'circleGreen' : 'circleRed'"></div>
+                    {{scope.row.status ? '正常' : '禁用'}}
                 </template>
             </el-table-column>
-            <!--            <el-table-column prop="online" label="状态">-->
-            <!--                <template slot-scope="scope">-->
-            <!--                    <div class="circle" :class="scope.row.online == '1' ? 'circleGreen' : 'circleRed'"></div>-->
-            <!--                    {{ scope.row.online == '1' ? '在线' : '离线' }}-->
-
-            <!--                </template>-->
-            <!--            </el-table-column>-->
             <el-table-column prop="opt" label="操作" width="200">
                 <template slot-scope="scope">
                     <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)">编辑</button>
-                    <button class="btnDel" @click="handleDelete(scope.$index, scope.row)">删除</button>
                 </template>
             </el-table-column>
         </el-table>
         <el-dialog :title="isEditOrAddL" :visible.sync="dialogFormVisible" width="35%">
             <el-form :model="form">
-                <el-form-item label="会员账号" :label-width="formLabelWidth">
-                    <el-input :disabled="popupType === 'editCustomer'" v-model="form.account"
+                <el-form-item label="账号" :label-width="formLabelWidth">
+                    <el-input disabled :disabled="popupType === 'editCustomer'" v-model="form.username"
                               autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="会员昵称" :label-width="formLabelWidth">
+                <el-form-item label="昵称" :label-width="formLabelWidth">
                     <el-input v-model="form.nickname" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="popupType === 'addCustomer'" label="登录密码" :label-width="formLabelWidth">
@@ -89,49 +66,24 @@
 </template>
 
 <script>
+    import {getAnchorList} from "@/api/control";
+    import {statusCode} from "@/util/statusCode";
+
     export default {
-        props: {
-            adminInfo: {
-                type: Object,
-                default: function () {
-                    return {}
-                }
-            },
-            groupList: {
-                type: Array,
-                default: function () {
-                    return []
-                }
-            },
-        },
-        name: "",
         data() {
             return {
-                fontColor: {
-                    cp: {
-                        color: '#F56C6C'
-                    },
-                    hp: {
-                        color: "#67C23A"
-                    },
-                    ts: {
-                        color: "#E6A23C"
-                    }
-                },
                 popupType: 'addCustomer',    //addCustomer || editCustomer
                 loading: true,
                 selectList: [],
                 dialogFormVisible: false,
                 form: {
-                    account: '',
+                    username: '',
                     nickname: '',
                     password: "",
                 },
                 formLabelWidth: '100px',
-                multipleSelection: [],
                 tableData: [],
-                isEditOrAddL: "新增会员",
-                topList: [{title: "会员列表", path: ""}]
+                isEditOrAddL: "新增",
             }
         },
         watch: {
@@ -145,8 +97,18 @@
             this.init()
         },
         methods: {
-            init() {
-                this.getKefuList()
+            async init() {
+                this.loading = true
+                try {
+                    let {data} = await getAnchorList()
+                    console.log(data)
+                    if (data.code === statusCode.success) {
+                        this.tableData = JSON.parse(JSON.stringify(data.data))
+                        this.loading = false
+                    }
+                } catch (e) {
+                    console.log('error--error')
+                }
             },
             toggleSelection(rows) { //取消选择
                 if (rows) {
@@ -165,83 +127,19 @@
                 this.selectList = val
             },
             addCustomer() {
-                this.isEditOrAddL = "新增会员"
+                this.isEditOrAddL = "新增"
                 this.dialogFormVisible = true
                 this.popupType = "addCustomer"
             },
             handleEdit(index, row) {
-                this.isEditOrAddL = "编辑会员"
+                this.isEditOrAddL = "编辑"
                 this.dialogFormVisible = true
                 this.popupType = "editCustomer"
                 this.form = {
-                    name: row.username,
-                    nickname: row.nick_name,
-                    num: row.customer_no,
+                    username: row.username,
+                    nickname: row.nickname,
                     password: row.password,
-                    group: row.group_id,
-                    age: row.age,
-                    work_time: row.work_time,
-                    introduce: row.introduction,
-                    id: row.id,
-                    domain: row.domain,
                 }
-            },
-            handleDelete(index, row) {
-                this.$confirm(`此操作将永久删除会员【${row.username}】, 是否继续?`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.axios({
-                        url: `${apiUrl}/admin/customer/delCostomers`,
-                        method: 'post',
-                        data: {
-                            token: this.adminInfo.token,
-                            uid: this.adminInfo.data.id,
-                            id: this.tableData[index].id,
-                        }
-                    }).then(res => {
-                        if (res.data.code == 20000) {
-                            this.$message.success('删除成功');
-                            this.getKefuList()
-                            this.toggleSelection()
-                        } else {
-                            this.$message(res.data.msg);
-                        }
-                    }).catch(err => {
-                        this.$message.error('删除失败');
-                    })
-                })
-            },
-            getKefuList() {
-                this.loading = true
-                this.axios({
-                    url: `${apiUrl}/admin/customer/lists`,
-                    method: 'post',
-                    data: {
-                        page_sise: 100,
-                        token: this.adminInfo.token,
-                        uid: this.adminInfo.data.id
-                    }
-                }).then(res => {
-                    if (res.data.code == 20000) {
-                        res.data.data && res.data.data.map((item) => {
-                            item.hps = Number(item.hps)
-                            item.cps = Number(item.cps)
-                            item.tss = Number(item.tss)
-                        })
-                        this.tableData = JSON.parse(JSON.stringify(res.data.data))
-                    } else {
-                        this.$message.error({message: res.data.msg, duration: 1000});
-                        if (res.data.code == '40008') {
-                            this.$router.push({path: '/'})
-                        }
-                    }
-                    this.loading = false
-                }).catch(err => {
-                    this.$message.error('数据获取失败');
-                    this.loading = false
-                })
             },
             optionList(type) {
                 let isForbidOp = type === "forbid" ? true : false
@@ -250,18 +148,17 @@
                     itemArr.push(item.id)
                 })
                 this.axios({
-                    url: `${apiUrl}/admin/customer/batchStatus`,
-                    method: 'post',
-                    data: {
-                        token: this.adminInfo.token,
-                        uid: this.adminInfo.data.id,
-                        list: itemArr,
-                        status: isForbidOp ? "2" : "1" //状态 1正常 2停用 3删除
-                    }
+                    // url: `${apiUrl}/admin/customer/batchStatus`,
+                    // method: 'post',
+                    // data: {
+                    //     token: this.adminInfo.token,
+                    //     uid: this.adminInfo.data.id,
+                    //     list: itemArr,
+                    //     status: isForbidOp ? "2" : "1" //状态 1正常 2停用 3删除
+                    // }
                 }).then(res => {
                     if (res.data.code == 20000) {
                         this.$message.success(isForbidOp ? '已批量禁用' : '已批量解除');
-                        this.getKefuList()
                         this.toggleSelection()
                     } else {
                         this.$message(res.data.msg);
@@ -271,33 +168,15 @@
                 })
             },
             submit() {
+                console.log(this.form)
                 if (this.popupType === 'addCustomer') {  //  增加窗口  无需返现
                     // this.form = {}
                 } else if (this.popupType === 'editCustomer') {
 
                 }
-                let url = `${apiUrl}/admin/customer/${this.popupType === 'addCustomer' ? 'addCostomers' : 'updateCostomers'}`
-                this.axios({
-                    url,
-                    method: 'post',
-                    data: {
-                        token: this.adminInfo.token,
-                        uid: this.adminInfo.data.id,
-                        id: this.form.id,
-                        username: this.form.name,
-                        nick_name: this.form.nickname,
-                        customer_no: this.form.num,
-                        password: this.form.password,
-                        group_id: this.form.group,
-                        age: this.form.age,
-                        work_time: this.form.work_time,
-                        introduction: this.form.introduce,
-                        domain: this.form.domain,
-                    }
-                }).then(res => {
+                this.axios({}).then(res => {
                     if (res.data.code == 20000) {
                         this.$message.success(this.popupType === 'addCustomer' ? '添加成功' : '修改成功');
-                        this.getKefuList()
                         this.dialogFormVisible = false
                     } else {
                         this.$message.error(res.data.msg);

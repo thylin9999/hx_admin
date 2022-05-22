@@ -147,7 +147,7 @@
                 }
             },
             handleDelete(index, row) {
-                this.$confirm(`此操作将永久删除广告【${row.nick_name}】, 是否继续?`, '提示', {
+                this.$confirm(`此操作将永久删除广告【${row.title}】, 是否继续?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
