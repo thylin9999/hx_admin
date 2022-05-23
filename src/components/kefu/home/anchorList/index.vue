@@ -1,20 +1,15 @@
 <template>
     <div id="customerList">
         <div class="topBtnList">
-            <button class="btnEdit" @click="optionList('forbid')">禁用</button>
-            <button class="btnEdit" @click="optionList('open')">解除</button>
-            <button class="btnEdit" @click="toggleSelection()">取消已选</button>
-            <button class="btnAdd" @click="addCustomer">新增主播</button>
+            <button class="btnAdd" @click="dialogFormVisible = true">新增主播</button>
         </div>
         <el-table
                 :cell-style="setSellStyle"
                 v-loading="loading"
                 ref="multipleTable"
                 tooltip-effect="dark"
-                @selection-change="handleSelectionChange"
                 :data="tableData" border
                 style="width: 100%">
-            <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column type="index" label="序号"></el-table-column>
             <el-table-column prop="username" label="主播账号"></el-table-column>
             <el-table-column prop="pic" label="头像">
@@ -30,8 +25,14 @@
             <el-table-column prop="createTime" label="创建时间"></el-table-column>
             <el-table-column prop="status" label="状态">
                 <template slot-scope="scope">
-                    <div class="circle" :class="scope.row.status ?  'circleGreen' : 'circleRed'"></div>
-                    {{scope.row.status ? '正常' : '禁用'}}
+                    <el-switch
+                            active-text="禁用"
+                            inactive-text="正常"
+                            active-color="#ccc"
+                            inactive-color="#ff4600"
+                            @change="changeSwitch(scope.row)"
+                            v-model="scope.row.status">
+                    </el-switch>
                 </template>
             </el-table-column>
             <el-table-column prop="opt" label="操作" width="200">
@@ -41,7 +42,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-dialog :title="isEditOrAddL" :visible.sync="dialogFormVisible" width="35%">
+        <el-dialog title="编辑/新增" :visible.sync="dialogFormVisible" width="35%">
             <el-form :model="form">
                 <el-form-item label="主播账号" :label-width="formLabelWidth">
                     <el-input :disabled="popupType === 'editCustomer'" v-model="form.username"
@@ -73,7 +74,8 @@
     export default {
         data() {
             return {
-                popupType: 'addCustomer',    //addCustomer || editCustomer
+                currentId:'',
+                popupType: '',
                 loading: true,
                 selectList: [],
                 dialogFormVisible: false,
@@ -84,14 +86,6 @@
                 },
                 formLabelWidth: '100px',
                 tableData: [],
-                isEditOrAddL: "新增主播",
-            }
-        },
-        watch: {
-            dialogFormVisible(newVal, oldVal) {
-                if (!newVal && this.popupType != 'addCustomer') { //新增窗口 &&  弹窗关闭状态
-                    this.form = {account: "", nickname: "", password: "",}
-                }
             }
         },
         mounted() {
@@ -111,31 +105,12 @@
                     console.log('error--error')
                 }
             },
-            toggleSelection(rows) { //取消选择
-                if (rows) {
-                    rows.forEach(row => {
-                        this.$refs.multipleTable.toggleRowSelection(row);
-                    });
-                } else {
-                    this.$refs.multipleTable.clearSelection();
-                }
-            },
-            setSellStyle({row, column, rowIndex, columnIndex}) {
+            setSellStyle({columnIndex}) {
                 if (columnIndex == 0) return "borderRadius: 10px  0 0 10px"
                 if (columnIndex == 16) return "borderRadius: 0  10px 10px 0"
             },
-            handleSelectionChange(val) { //选中数组
-                this.selectList = val
-            },
-            addCustomer() {
-                this.isEditOrAddL = "新增主播"
-                this.dialogFormVisible = true
-                this.popupType = "addCustomer"
-            },
             handleEdit(index, row) {
-                this.isEditOrAddL = "编辑主播"
                 this.dialogFormVisible = true
-                this.popupType = "editCustomer"
                 this.form = {
                     username: row.username,
                     nickname: row.nickname,
@@ -151,50 +126,11 @@
 
                 })
             },
-            optionList(type) {
-                let isForbidOp = type === "forbid" ? true : false
-                let itemArr = []
-                this.selectList.forEach((item, i) => {
-                    itemArr.push(item.id)
-                })
-                this.axios({
-                    // url: `${apiUrl}/admin/customer/batchStatus`,
-                    // method: 'post',
-                    // data: {
-                    //     token: this.adminInfo.token,
-                    //     uid: this.adminInfo.data.id,
-                    //     list: itemArr,
-                    //     status: isForbidOp ? "2" : "1" //状态 1正常 2停用 3删除
-                    // }
-                }).then(res => {
-                    if (res.data.code == 20000) {
-                        this.$message.success(isForbidOp ? '已批量禁用' : '已批量解除');
-                        this.toggleSelection()
-                    } else {
-                        this.$message(res.data.msg);
-                    }
-                }).catch(err => {
-                    this.$message.error('修改失败');
-                })
-            },
             submit() {
-                console.log(this.form)
-                if (this.popupType === 'addCustomer') {  //  增加窗口  无需返现
-                    // this.form = {}
-                } else if (this.popupType === 'editCustomer') {
 
-                }
-                this.axios({
-                }).then(res => {
-                    if (res.data.code == 20000) {
-                        this.$message.success(this.popupType === 'addCustomer' ? '添加成功' : '修改成功');
-                        this.dialogFormVisible = false
-                    } else {
-                        this.$message.error(res.data.msg);
-                    }
-                }).catch(err => {
-                    this.$message(this.popupType === 'addCustomer' ? '添加失败' : '修改失败');
-                })
+            },
+            changeSwitch(item) {
+                console.log(item.id, item.status)
             }
         }
     }

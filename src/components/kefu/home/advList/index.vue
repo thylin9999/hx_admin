@@ -25,8 +25,14 @@
             <el-table-column prop="remark" label="备注"></el-table-column>
             <el-table-column prop="status" label="状态">
                 <template slot-scope="scope">
-                    <div class="circle" :class="scope.row.status == 1 ?  'circleGreen' : 'circleRed'"></div>
-                    {{scope.row.status == 1 ? '正常' : '禁用'}}
+                    <el-switch
+                            active-text="禁用"
+                            inactive-text="正常"
+                            active-color="#ccc"
+                            inactive-color="#ff4600"
+                            @change="changeSwitch(scope.row)"
+                            v-model="scope.row.status">
+                    </el-switch>
                 </template>
             </el-table-column>
             <el-table-column prop="optMan" label="操作人"></el-table-column>
@@ -37,7 +43,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-dialog title="新增/编辑 广告" :visible.sync="dialog" width="20%">
+        <el-dialog title="新增/编辑" :visible.sync="dialog" width="20%">
             <el-form ref="ruleForm" :model="formItem" label-width="80px">
                 <el-form-item label="广告标题">
                     <el-input v-model="formItem.title"></el-input>
@@ -83,15 +89,6 @@
     import {statusCode} from "@/util/statusCode";
 
     export default {
-        name: 'adminList',
-        props: {
-            adminInfo: {
-                type: Object,
-                default: function () {
-                    return {}
-                }
-            },
-        },
         data() {
             return {
                 loading: true,
@@ -152,35 +149,18 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    // this.axios({
-                    //     url: `${apiUrl}/admin/admin/updateAdmin`,
-                    //     method: 'post',
-                    //     data: {
-                    //         token: this.adminInfo.token,
-                    //         uid: this.adminInfo.data.id,
-                    //         id: this.tableData[index].id,
-                    //         status: '3'
-                    //     }
-                    // }).then(res => {
-                    //     if (res.data.code == 20000) {
-                    //         this.$message.success('删除成功');
-                    //         this.getAdminList()
-                    //     } else {
-                    //         this.$message(res.data.msg);
-                    //     }
-                    // }).catch(err => {
-                    //     this.$message.error('删除失败');
-                    // })
                 })
             },
-            onSubmit(type) {
-                // this.dialog = false
+            onSubmit() {
                 console.log(this.formItem)
             },
             resetForm() {
                 for (let key in this.formItem) {
                     if (typeof this.formItem[key] !== "boolean") this.formItem[key] = ''
                 }
+            },
+            changeSwitch(item) {
+                console.log(item)
             }
         }
     }

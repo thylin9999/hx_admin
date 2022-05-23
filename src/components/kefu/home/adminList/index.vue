@@ -7,14 +7,20 @@
                   v-loading="loading" ref="multipleTable" tooltip-effect="dark" :data="tableData" border
                   style="width: 100%">
             <el-table-column type="index" label="序号"></el-table-column>
-            <el-table-column prop="account" label="管理员账号"></el-table-column>
+            <el-table-column prop="username" label="管理员"></el-table-column>
             <el-table-column prop="create_time" label="创建时间"></el-table-column>
             <el-table-column prop="last_time" label="登录时间"></el-table-column>
             <el-table-column prop="last_ip" label="登录ip"></el-table-column>
             <el-table-column prop="status" label="状态">
                 <template slot-scope="scope">
-                    <div class="circle" :class="scope.row.status ?  'circleGreen' : 'circleRed'"></div>
-                    {{scope.row.status ? '正常' : '禁用'}}
+                    <el-switch
+                            active-text="禁用"
+                            inactive-text="正常"
+                            active-color="#ccc"
+                            inactive-color="#ff4600"
+                            @change="changeSwitch(scope.row)"
+                            v-model="scope.row.status">
+                    </el-switch>
                 </template>
             </el-table-column>
             <el-table-column prop="createMan" label="操作人"></el-table-column>
@@ -42,10 +48,10 @@
                 <button class="btnSubmit" @click="submit">提 交</button>
             </div>
         </el-dialog>
-        <el-dialog title="新增管理员" :visible.sync="addDialog" width="20%">
+        <el-dialog title="编辑/新增" :visible.sync="addDialog" width="20%">
             <el-form :model="form">
                 <el-form-item label="账号">
-                    <el-input disabled v-model="form.account" placeholder="管理员账号"></el-input>
+                    <el-input disabled v-model="form.username" placeholder="管理员账号"></el-input>
                 </el-form-item>
                 <el-form-item label="密码">
                     <el-input v-model="form.password" placeholder="管理员密码"></el-input>
@@ -53,7 +59,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <button class="btnCancle" @click="addDialog = false">取 消</button>
-                <button class="btnSubmit" type="primary" @click="submit('addAdmin')">提 交</button>
+                <button class="btnSubmit" type="primary" @click="submit()">提 交</button>
             </div>
         </el-dialog>
     </div>
@@ -67,6 +73,7 @@
         name: 'adminList',
         data() {
             return {
+                currentId:'',
                 loading: true,
                 value: true,
                 tableData: [],
@@ -75,7 +82,7 @@
                 isComAdminPop: false,
                 addDialog: false,
                 form: {
-                    account: '',
+                    username: '',
                     password: '',
                 },
             }
@@ -105,10 +112,11 @@
             },
             handleEdit(index, row) {
                 this.addDialog = true
-                this.form.account = row.account
+                this.currentId = row.id
+                this.form.username = row.username
             },
             handleDelete(index, row) {
-                this.$confirm(`此操作将永久删除管理员【${row.account}】, 是否继续?`, '提示', {
+                this.$confirm(`此操作将永久删除管理员【${row.username}】, 是否继续?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -116,8 +124,11 @@
                 })
             },
             submit() {
-                console.log(this.form)
+                console.log(this.currentId)
             },
+            changeSwitch(item) {
+                console.log(item.id, item.status)
+            }
         }
     }
 </script>

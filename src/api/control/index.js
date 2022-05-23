@@ -29,10 +29,34 @@ export function getAnchorList() { //主播列表
         params: {}
     })
 }
-export function getMemberList() { //主播列表
+export function getMemberList() { //会员列表
     return request({
         method: 'post',
         url: url.memberList,
+        params: {}
+    })
+}
+
+export function getMatchList() { //赛事列表
+    return request({
+        method: 'post',
+        url: url.matchList,
+        params: {}
+    })
+}
+
+export function getLiveList() { //直播列表
+    return request({
+        method: 'post',
+        url: url.liveList,
+        params: {}
+    })
+}
+
+export function getContentList() { //内容列表
+    return request({
+        method: 'post',
+        url: url.contentList,
         params: {}
     })
 }

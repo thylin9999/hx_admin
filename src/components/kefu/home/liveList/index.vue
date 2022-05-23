@@ -1,282 +1,182 @@
 <template>
     <div>
-        <div class="top">
-            <div class="searchTop">
-                <div>
-                    <el-col :span="16">
-                        <el-select style="width: 100%" v-model="currentType" placeholder="请选择分组">
-                            <el-option
-                                    v-for="item in groupList"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-                    <el-col :span="2" style="margin-left: 5px">
-                        <div class="grid-content bg-purple">
-                            <button class="btnSearch" @click="query('group_id')">类别</button>
-                        </div>
-                    </el-col>
-                </div>
-                <div>
-                    <el-col :span="6" style="line-height: 40px;text-align: center">
-                        搜索直播
-                    </el-col>
-                    <el-col :span="10">
-                        <div class="grid-content bg-purple">
-                            <el-input :span="4" v-model="usernameQuery" placeholder="请输入"></el-input>
-                        </div>
-                    </el-col>
-                    <el-col :span="2" style="margin-left: 5px">
-                        <div class="grid-content bg-purple">
-                            <button class="btnSearch" type="primary" @click="query('username')">查询</button>
-                        </div>
-                    </el-col>
-                </div>
-            </div>
-        </div>
-        <div class="bot" style="margin-top: 10px">
-            <el-table
-                    :cell-style="setSellStyle"
-                    v-loading="loading"
-                    ref="multipleTable"
-                    tooltip-effect="dark"
-                    :data="tableData" border
-                    style="width: 100%">
-                <el-table-column type="index" label="序号" width="50"></el-table-column>
-                <el-table-column prop="avatar" label="球队logo" width="160">
-                    <template slot-scope="scope">
-                        <el-image
-                                style="max-width: 32px;max-height: 32px"
-                                :src="scope.row.avatar"
-                                :preview-src-list="[scope.row.avatar,scope.row.avatar]">
-                        </el-image>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="username" label="球队简称"></el-table-column>
-                <el-table-column prop="create_time" label="开赛时间"></el-table-column>
-                <el-table-column prop="opt" label="操作">
-                    <template slot-scope="scope">
-                        <button
-                                class="btnDetail"
-                                @click="handleEdit(scope.$index, scope.row)">查看详情
-                        </button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
-        <el-dialog :title="groupDetail" :visible.sync="dialogFormVisible" width="90%">
-            <el-table
-                    :cell-style="setSellStyle"
-                    v-loading="loadingPop"
-                    ref="multipleTable"
-                    :data="tableDataDetail"
-                    style="width: 100%">
-                <el-table-column prop="day_time" label="时间"></el-table-column>
-                <el-table-column prop="nick_name" label="赛事名称"></el-table-column>
-                <el-table-column prop="customer_no" label="赛事编号"></el-table-column>
-                <el-table-column prop="group_name" label="组别 ↓"></el-table-column>
-                <el-table-column prop="create_time" label="创建时间"></el-table-column>
-                <el-table-column prop="djrs" label="对接人数"></el-table-column>
-                <el-table-column label="好评数">
-                    <template slot-scope="scope">
-                        <span :style="Number(scope.row.hps) > 0 ? fontColor.hp : ''">{{scope.row.hps}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="差评数">
-                    <template slot-scope="scope">
-                        <span :style="scope.row.cps > 0 ? fontColor.cp : ''">{{scope.row.cps}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="投诉数">
-                    <template slot-scope="scope">
-                        <span :style="scope.row.tss > 0 ? fontColor.ts : ''">{{scope.row.tss}}</span>
-                    </template>
-                </el-table-column>
-            </el-table>
+        <el-table :cell-style="setSellStyle" :span="24" :row-style="{height:'58px'}" :header-row-style="{height:'40px'}"
+                  v-loading="loading" ref="multipleTable" tooltip-effect="dark" :data="tableData" border
+                  style="width: 100%">
+            <el-table-column type="index" label="序号"></el-table-column>
+            <el-table-column prop="ID" label="直播间ID"></el-table-column>
+            <el-table-column prop="title" label="直播间标题"></el-table-column>
+            <el-table-column prop="anchorAccount" label="主播账号"></el-table-column>
+            <el-table-column prop="anchorNickname" label="主播昵称"></el-table-column>
+            <el-table-column prop="recommend" label="是否推荐">
+                <template slot-scope="scope">
+                    <el-switch
+                            active-text="否"
+                            inactive-text="是"
+                            active-color="#ccc"
+                            inactive-color="#ff4600"
+                            @change="switchChange(scope.row)"
+                            v-model="scope.row.recommend">
+                    </el-switch>
+                </template>
+            </el-table-column>
+            <el-table-column prop="sort" label="推荐热门排序"></el-table-column>
+            <el-table-column prop="line" label="是否在线">
+                <template slot-scope="scope">
+                    <div class="circle" :class="scope.row.line === 1  ?  'circleGreen' : 'circleRed'"></div>
+                    {{scope.row.line === 1 ? '在线' : '离线'}}
+                </template>
+            </el-table-column>
+            <el-table-column prop="createTime" label="创建时间"></el-table-column>
+            <el-table-column prop="recentOpenTime" label="最近开播时间"></el-table-column>
+            <el-table-column prop="visitNum" label="访问人数"></el-table-column>
+            <el-table-column prop="cover" label="直播封面">
+                <template slot-scope="scope">
+                    <el-image
+                            style="max-width: 32px;max-height: 32px"
+                            :src="scope.row.cover"
+                            :preview-src-list="[scope.row.cover,scope.row.cover]">
+                    </el-image>
+                </template>
+            </el-table-column>
+            <el-table-column prop="status" label="状态">
+                <template slot-scope="scope">
+                    <el-switch
+                            active-text="禁播"
+                            inactive-text="正常"
+                            active-color="#ccc"
+                            inactive-color="#ff4600"
+                            @change="switchChange(scope.row)"
+                            v-model="scope.row.status">
+                    </el-switch>
+                </template>
+            </el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)" type="text">编辑</button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-dialog title="新增/编辑 广告" :visible.sync="dialog" width="40%">
+            <el-form ref="ruleForm" :model="formItem" label-width="100px">
+                <el-form-item label="直播间标题">
+                    <el-input v-model="formItem.title"></el-input>
+                </el-form-item>
+                <el-form-item label="是否推荐">
+                    <el-switch v-model="formItem.recommend" active-color="#ff4600" inactive-color="#ccc"></el-switch>
+                </el-form-item>
+                <el-form-item label="推荐排序">
+                    <el-input v-model="formItem.sort"></el-input>
+                </el-form-item>
+                <el-form-item label="状态">
+                    <el-switch v-model="formItem.status" active-text="正常" inactive-text="禁用">>
+                    </el-switch>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit">提交</el-button>
+                    <el-button @click="dialog = false">取消</el-button>
+                    <el-button @click="resetForm()">重置</el-button>
+                </el-form-item>
+            </el-form>
         </el-dialog>
     </div>
 </template>
 
 <script>
+    import {getLiveList} from "@/api/control";
+    import {statusCode} from "@/util/statusCode";
+
     export default {
-        props: {
-            adminInfo: {
-                type: Object,
-                default: function () {
-                    return {}
-                }
-            }
-        },
-        name: "",
         data() {
             return {
                 loading: true,
-                loadingPop: true,
-                fontColor: {
-                    cp: {
-                        color: '#F56C6C'
-                    },
-                    hp: {
-                        color: "#67C23A"
-                    },
-                    ts: {
-                        color: "#E6A23C"
-                    }
-                },
-                usernameQuery: "",
-                noQuery: "",
-                dialogFormVisible: false,
-                groupDetail: "",
-                input: "",
-                value2: '',
                 tableData: [],
-                tableDataDetail: [],
-                pickerOptions: {
-                    shortcuts: [{
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近三个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
-                currentType: "全部",
-                groupList: [
-                    {id: 1, name: '全部'},
-                    {id: 2, name: '足球'},
-                    {id: 3, name: '篮球'},
-                    {id: 4, name: '其他'},
-                ],
-                value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
+                isEditTxt: "详情/编辑",
+                currentId: '',
+                dialog: false,
+                formItem: {
+                    title: '',
+                    recommend: '',
+                    sort: '',
+                    status: false,
+                }
             }
         },
-        watch: {
-            value1(newVal, oldVal) {
-            },
-            value2(newVal, oldVal) {
-                this.start_time = newVal[0]
-                this.end_time = newVal[1]
-                this.query('time')
-            }
-        },
-        mounted() {
+        created() {
             this.init()
         },
         methods: {
-            init() {
-                this.getKefuList()
-            },
-            query(type) {
-                this.getKefuList(type)
+            async init() {
+                this.loading = true
+                try {
+                    let {data} = await getLiveList()
+                    console.log(data)
+                    if (data.code === statusCode.success) {
+                        this.tableData = JSON.parse(JSON.stringify(data.data))
+                        this.loading = false
+                    }
+                } catch (e) {
+                    console.log('error--error')
+                }
             },
             setSellStyle({row, column, rowIndex, columnIndex}) {
                 if (columnIndex == 0) return "borderRadius: 10px  0 0 10px"
-                if (this.dialogFormVisible && columnIndex == 8) return "borderRadius: 0  10px 10px 0"
-                if (!this.dialogFormVisible && columnIndex == 11) return "borderRadius: 0  10px 10px 0"
+                if (columnIndex == 7) return "borderRadius: 0  10px 10px 0"
             },
             handleEdit(index, row) {
-                this.loadingPop = true
-                this.dialogFormVisible = !this.dialogFormVisible
-                this.axios({
-                    url: `${apiUrl}/admin/customer/details`,
-                    method: 'post',
-                    data: {
-                        uid: this.adminInfo.data.id,
-                        token: this.adminInfo.token,
-                        id: this.tableData[index].id,
-                    },
-                }).then(res => {
-                    if (res.data.code === 20000) {
-                        this.tableDataDetail = JSON.parse(JSON.stringify(res.data.data))
-                        this.groupDetail = "赛事统计【" + this.tableDataDetail[0].customer_no + '】'
-                    }
-                    this.loadingPop = false
-                }).catch(err => {
-                    this.$message.error('数据获取失败');
-                    this.loadingPop = false
-                })
-
-            },
-            getKefuList(type) {
-                this.loading = true
-                let data = {
-                    page_sise: 100,
-                    token: this.adminInfo.token,
-                    uid: this.adminInfo.data.id
-                }
-                if (type == 'username') {
-                    data.username = this.usernameQuery
-                } else if (type == 'no') {
-                    data.customer_no = this.noQuery
-                } else if (type == 'time') {
-                    data.start_time = this.start_time
-                    data.end_time = this.end_time
-                }
-                this.axios({
-                    url: `${apiUrl}/admin/customer/lists`,
-                    method: 'post',
-                    data,
-                }).then(res => {
-                    if (res.data.code == 20000) {
-                        this.tableData = JSON.parse(JSON.stringify(res.data.data))
-                    } else {
-                        this.$message.error({message: res.data.msg, duration: 1000});
-                        if (res.data.code == '40008') {
-                            this.$router.push({path: '/'})
+                this.dialog = true
+                this.status = row.status
+                this.currentId = this.tableData[index].id
+                for (let k in row) {
+                    for (let key in this.formItem) {
+                        if (k === key) {
+                            this.formItem[key] = row[k]
                         }
                     }
-                    this.loading = false
-                }).catch(err => {
-                    this.$message.error('数据获取失败');
-                    this.loading = false
-                })
+                }
             },
-        },
+            onSubmit(type) {
+                // this.dialog = false
+                console.log(this.formItem)
+            },
+            switchChange(row) {
+                console.log(row)
+            },
+            resetForm() {
+                for (let key in this.formItem) {
+                    if (typeof this.formItem[key] !== "boolean") this.formItem[key] = ''
+                }
+            }
+        }
     }
 </script>
 
 <style scoped lang="scss">
-
-  .searchTop {
-    display: flex;
-    justify-content: flex-end;
+  .editBtn {
+    color: #1e82d2;
   }
 
-  /deep/ .el-table--border .el-table__cell, .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
+  .popImg {
+    width: 50%;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .popImgSee {
+    width: 100%;
+  }
+
+  /deep/ .el-table--border .el-table__cell,
+  .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
     border: 0;
   }
 
   /deep/ .el-table tr {
     cellspacing: 10px;
-    border: 1px solid #CCCCCC;
+    border: 1px solid #cccccc;
     padding: 15px 0;
-  }
-
-  /deep/ .el-dialog__header {
-    background-color: #000;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    padding: 20px;
   }
 
   /deep/ .el-table__body {
@@ -286,6 +186,8 @@
   }
 
   /deep/ .el-dialog {
+    //弹窗
+    //width: 400px !important;
     border-radius: 20px;
   }
 
@@ -293,10 +195,16 @@
     color: #fff;
   }
 
-  /deep/ .el-dialog__body {
-    background-color: #f6f6f6;
-    border-radius: 20px;
+  /deep/ .el-dialog__header {
+    background-color: #000;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding: 20px;
   }
 
-
+  /deep/ .el-input__inner {
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px solid #ccc;
+  }
 </style>

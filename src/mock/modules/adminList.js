@@ -8,7 +8,7 @@ const adminList = config => {
         data: [
             {
                 "id": 10001,
-                "account": "admin",
+                "username": "admin",
                 "status": false,
                 "create_time": "2021-11-06 17:58:35",
                 "update_time": "2021-11-06 17:58:35",
@@ -18,8 +18,8 @@ const adminList = config => {
             },
             {
                 "id": 10002,
-                "account": "alin",
-                "status": false,
+                "username": "alin",
+                "status": true,
                 "create_time": "2021-11-06 17:58:35",
                 "update_time": "2021-11-06 17:58:35",
                 "last_ip": "86.98.63.141",
@@ -28,8 +28,8 @@ const adminList = config => {
             },
             {
                 "id": 10001,
-                "account": "sober",
-                "status": false,
+                "username": "sober",
+                "status": true,
                 "create_time": "2021-11-06 17:58:35",
                 "update_time": "2021-11-06 17:58:35",
                 "last_ip": "86.98.63.141",

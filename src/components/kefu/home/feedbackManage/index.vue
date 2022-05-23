@@ -12,8 +12,14 @@
             <el-table-column prop="content" label="内容"></el-table-column>
             <el-table-column prop="status" label="是否受理">
                 <template slot-scope="scope">
-                    <div class="circle" :class="scope.row.status ?  'circleGreen' : 'circleRed'"></div>
-                    {{scope.row.status ? '已受理' : '未受理'}}
+                    <el-switch
+                            active-text="未受理"
+                            inactive-text="已受理"
+                            active-color="#ccc"
+                            inactive-color="#ff4600"
+                            @change="changeSwitch(scope.row)"
+                            v-model="scope.row.status">
+                    </el-switch>
                 </template>
             </el-table-column>
             <el-table-column prop="optMan" label="操作人"></el-table-column>
@@ -34,15 +40,6 @@
                 </el-form-item>
                 <el-form-item label="反馈内容" :label-width="formLabelWidth">
                     <el-input disabled type="textarea" v-model="form.content"></el-input>
-                </el-form-item>
-                <el-form-item label="是否受理" :label-width="formLabelWidth">
-                    <el-switch
-                            v-model="switchValue"
-                            active-color="#ff4600"
-                            inactive-color="#ccc"
-                            active-text="已经受理"
-                            inactive-text="未受理">
-                    </el-switch>
                 </el-form-item>
                 <el-form-item label="操作人" :label-width="formLabelWidth">
                     <el-input disabled v-model="form.optMan"></el-input>
@@ -127,6 +124,9 @@
                 console.log(this.currentId)
                 console.log(this.switchValue)
             },
+            changeSwitch(item) {
+                console.log(item)
+            }
         }
     }
 </script>
