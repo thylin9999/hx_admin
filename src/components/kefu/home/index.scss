@@ -53,47 +53,15 @@
 }
 
 .visitData {
-  display: flex;
-  flex-wrap: wrap;
 
+  .bot {
+    position: fixed;
+    bottom: 20px;
 
-  .visitNum, .speakNum, .waitDeal {
-    position: relative;
-    height: 300px;
-    padding: 10px 10px 8px 10px;
-
-    img {
-      position: absolute;
-      height: 35%;
-      bottom: 0;
-      right: 0;
+    .beianhao {
+      text-align: center;
     }
   }
-
-
-  .visitNum {
-    height: 350px;
-    width: 100%;
-    margin: 30px 2% 50px 0;
-    border-radius: 10px;
-    background-color: #fff;
-  }
-
-  .waitDeal {
-    width: 40%;
-    border-radius: 10px;
-    background-color: #fff;
-
-    .waitTxt {
-      position: absolute;
-      top: -35px;
-      left: 0;
-      font-size: 16px;
-      font-weight: 500;
-      color: #333;
-    }
-  }
-
 }
 
 /deep/ .visitData .el-table--enable-row-transition .el-table__body td.el-table__cell .cell {
