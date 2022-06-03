@@ -1,8 +1,11 @@
 <template>
     <div>
-        <el-button style="float: right;border-radius: 10px;margin-bottom: 5px;background-color: #1f1d20;color: #fff"
-                   @click="addDialog = true">新增管理员+
-        </el-button>
+<!--        <el-button style="float: right;border-radius: 10px;margin-bottom: 5px;background-color: #189e90;color: #fff"-->
+<!--                   @click="addDialog = true">新增管理员+-->
+<!--        </el-button>-->
+        <div class="topBtnList">
+            <button class="btnAdd"  @click="addDialog = true">新增管理员</button>
+        </div>
         <el-table :cell-style="setSellStyle" :span="24" :row-style="{height:'58px'}" :header-row-style="{height:'40px'}"
                   v-loading="loading" ref="multipleTable" tooltip-effect="dark" :data="tableData" border
                   style="width: 100%">
@@ -17,7 +20,7 @@
                             active-text="禁用"
                             inactive-text="正常"
                             active-color="#ccc"
-                            inactive-color="#ff4600"
+                            inactive-color="green"
                             @change="changeSwitch(scope.row)"
                             v-model="scope.row.status">
                     </el-switch>
@@ -26,8 +29,8 @@
             <el-table-column prop="createMan" label="操作人"></el-table-column>
             <el-table-column prop="username" label="操作">
                 <template slot-scope="scope">
-                    <button class="btnDetail" @click="handleEdit(scope.$index, scope.row)" type="text">编辑
-                    </button>
+<!--                    <button class="btnDetail" @click="handleEdit(scope.$index, scope.row)" type="text">编辑</button>-->
+                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit" circle></el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -58,8 +61,11 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <button class="btnCancle" @click="addDialog = false">取 消</button>
-                <button class="btnSubmit" type="primary" @click="submit()">提 交</button>
+<!--                <button class="btnCancle" @click="addDialog = false">取 消</button>-->
+<!--                <button class="btnSubmit" type="primary" @click="submit()">提 交</button>-->
+
+                <el-button type="primary" @click="submit()">提交</el-button>
+                <el-button @click="addDialog = false">取消</el-button>
             </div>
         </el-dialog>
     </div>
@@ -73,7 +79,7 @@
         name: 'adminList',
         data() {
             return {
-                currentId:'',
+                currentId: '',
                 loading: true,
                 value: true,
                 tableData: [],
@@ -178,7 +184,7 @@
   }
 
   /deep/ .el-dialog__header {
-    background-color: #000;
+    background-color: #189e90;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     padding: 20px;

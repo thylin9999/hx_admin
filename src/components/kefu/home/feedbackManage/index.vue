@@ -16,7 +16,7 @@
                             active-text="未受理"
                             inactive-text="已受理"
                             active-color="#ccc"
-                            inactive-color="#ff4600"
+                            inactive-color="green"
                             @change="changeSwitch(scope.row)"
                             v-model="scope.row.status">
                     </el-switch>
@@ -25,10 +25,12 @@
             <el-table-column prop="optMan" label="操作人"></el-table-column>
             <el-table-column prop="opt" label="操作">
                 <template slot-scope="scope">
-                    <button
-                            class="btnDetail"
-                            @click="handleEdit(scope.$index, scope.row)">编辑
-                    </button>
+<!--                    <button-->
+<!--                            class="btnDetail"-->
+<!--                            @click="handleEdit(scope.$index, scope.row)">编辑-->
+<!--                    </button>-->
+                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit" circle></el-button>
+<!--                    <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete" circle></el-button>-->
                 </template>
             </el-table-column>
         </el-table>
@@ -46,8 +48,11 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <button class="btnCancle" @click="dialogFormVisible = false">取 消</button>
-                <button class="btnSubmit" type="primary" @click="submit">确 定</button>
+<!--                <button class="btnCancle" @click="dialogFormVisible = false">取 消</button>-->
+<!--                <button class="btnSubmit" type="primary" @click="submit">确 定</button>-->
+
+                <el-button type="primary" @click="submit()">提交</el-button>
+                <el-button @click="dialogFormVisible = false">取消</el-button>
             </div>
         </el-dialog>
     </div>
@@ -173,7 +178,7 @@
   }
 
   /deep/ .el-dialog__header {
-    background-color: #000;
+    background-color: #189e90;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     padding: 20px;

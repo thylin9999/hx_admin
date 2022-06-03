@@ -29,7 +29,7 @@
                             active-text="禁用"
                             inactive-text="正常"
                             active-color="#ccc"
-                            inactive-color="#ff4600"
+                            inactive-color="green"
                             @change="changeSwitch(scope.row)"
                             v-model="scope.row.status">
                     </el-switch>
@@ -37,8 +37,12 @@
             </el-table-column>
             <el-table-column prop="opt" label="操作" width="200">
                 <template slot-scope="scope">
-                    <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)">编辑</button>
-                    <button class="btnDel" @click="handleDelete(scope.$index, scope.row)">删除</button>
+                    <!--                    <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)">编辑</button>-->
+                    <!--                    <button class="btnDel" @click="handleDelete(scope.$index, scope.row)">删除</button>-->
+                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit"
+                               circle></el-button>
+                    <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete"
+                               circle></el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -59,8 +63,11 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <button class="btnCancle" @click="dialogFormVisible = false">取 消</button>
-                <button class="btnSubmit" type="primary" @click="submit">提 交</button>
+<!--                <button class="btnCancle" @click="dialogFormVisible = false">取 消</button>-->
+<!--                <button class="btnSubmit" type="primary" @click="submit">提 交</button>-->
+
+                <el-button type="primary" @click="submit()">提交</el-button>
+                <el-button @click="dialogFormVisible = false">取消</el-button>
             </div>
         </el-dialog>
     </div>
@@ -74,7 +81,7 @@
     export default {
         data() {
             return {
-                currentId:'',
+                currentId: '',
                 popupType: '',
                 loading: true,
                 selectList: [],
@@ -142,11 +149,11 @@
   }
 
   /deep/ .el-table .descending .sort-caret.descending {
-    border-top-color: #000;
+    border-top-color: #189e90;
   }
 
   /deep/ .el-table .ascending .sort-caret.ascending {
-    border-bottom-color: #000;
+    border-bottom-color: #189e90;
   }
 
   /deep/ .el-table--border .el-table__cell, .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
@@ -181,7 +188,7 @@
   }
 
   /deep/ .el-dialog__header {
-    background-color: #000;
+    background-color: #189e90;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     padding: 20px;

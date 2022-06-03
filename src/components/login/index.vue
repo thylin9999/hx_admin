@@ -11,9 +11,8 @@
                 fullscreenLoading: false,
                 username: "",
                 password: "",
-                bg: require("@assets/kefu/bg.jpg"),
-                circleImg: require("@assets/kefu/d.png"),
-                loginImg: require("@assets/kefu/e.png"),
+                bg: require("@assets/bg.jpg"),
+                bg1: require("@assets/kefu/bg.jpg"),
                 checked: false
             }
         },

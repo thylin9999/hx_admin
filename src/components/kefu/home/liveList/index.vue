@@ -14,7 +14,7 @@
                             active-text="否"
                             inactive-text="是"
                             active-color="#ccc"
-                            inactive-color="#ff4600"
+                            inactive-color="green"
                             @change="switchChange(scope.row)"
                             v-model="scope.row.recommend">
                     </el-switch>
@@ -45,7 +45,7 @@
                             active-text="禁播"
                             inactive-text="正常"
                             active-color="#ccc"
-                            inactive-color="#ff4600"
+                            inactive-color="green"
                             @change="switchChange(scope.row)"
                             v-model="scope.row.status">
                     </el-switch>
@@ -53,7 +53,8 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)" type="text">编辑</button>
+<!--                    <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)" type="text">编辑</button>-->
+                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit" circle></el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -63,7 +64,7 @@
                     <el-input v-model="formItem.title"></el-input>
                 </el-form-item>
                 <el-form-item label="是否推荐">
-                    <el-switch v-model="formItem.recommend" active-color="#ff4600" inactive-color="#ccc"></el-switch>
+                    <el-switch v-model="formItem.recommend" active-color="green" inactive-color="#ccc"></el-switch>
                 </el-form-item>
                 <el-form-item label="推荐排序">
                     <el-input v-model="formItem.sort"></el-input>
@@ -196,7 +197,7 @@
   }
 
   /deep/ .el-dialog__header {
-    background-color: #000;
+    background-color: #189e90;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     padding: 20px;

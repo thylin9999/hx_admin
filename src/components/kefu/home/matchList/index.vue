@@ -58,7 +58,7 @@
                 <el-table-column prop="isHot" label="是否设为热门">
                     <template slot-scope="scope">
                         <el-switch
-                                active-color="#ff4600"
+                                active-color="green"
                                 inactive-color="#ccc"
                                 @change="switchChange(scope.row)"
                                 v-model="scope.row.isHot">
@@ -70,7 +70,11 @@
                 <el-table-column prop="remark" label="备注"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <button class="btnDel" @click="handleDelete(scope.$index, scope.row)">删除</button>
+                        <!--                        <button class="btnDel" @click="handleDelete(scope.$index, scope.row)">删除</button>-->
+<!--                        <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit"-->
+<!--                                   circle></el-button>-->
+                        <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete"
+                                   circle></el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -124,6 +128,9 @@
             },
             switchChange(row) {
                 console.log(row)
+            },
+            handleEdit(index, row) {
+                console.log(index, row)
             },
             handleDelete(index, row) {
                 this.$confirm(`删除此项联赛【${row.nameChs}】, 是否继续?`, '提示', {
@@ -188,7 +195,7 @@
   }
 
   /deep/ .el-dialog__header {
-    background-color: #000;
+    background-color: #189e90;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     padding: 20px;

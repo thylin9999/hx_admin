@@ -17,7 +17,7 @@
                 <template slot-scope="scope">
                     <el-switch
                             active-color="#ccc"
-                            inactive-color="#ff4600"
+                            inactive-color="green"
                             @change="switchChange(scope.row)"
                             active-text="关"
                             inactive-text="开"
@@ -32,11 +32,13 @@
             </el-table-column>
             <el-table-column prop="opt" label="操作" width="200">
                 <template slot-scope="scope">
-                    <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)" type="text" size="small">
-                        编辑
-                    </button>
-                    <button class="btnDel" type="text" size="small" @click="handleDelete(scope.$index, scope.row)">删除
-                    </button>
+<!--                    <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)" type="text" size="small">-->
+<!--                        编辑-->
+<!--                    </button>-->
+<!--                    <button class="btnDel" type="text" size="small" @click="handleDelete(scope.$index, scope.row)">删除-->
+<!--                    </button>-->
+                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit" circle></el-button>
+                    <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete" circle></el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -60,8 +62,11 @@
             </el-form>
 
             <div slot="footer" class="dialog-footer">
-                <button class="btnCancle" @click="dialogFormVisible = false">取 消</button>
-                <button class="btnSubmit" @click="submit">提 交</button>
+<!--                <button class="btnCancle" @click="dialogFormVisible = false">取 消</button>-->
+<!--                <button class="btnSubmit" @click="submit">提 交</button>-->
+
+                <el-button type="primary" @click="submit()">提交</el-button>
+                <el-button @click="dialogFormVisible = false">取消</el-button>
             </div>
         </el-dialog>
     </div>
@@ -109,6 +114,9 @@
                 } catch (e) {
                     console.log('error--error')
                 }
+            },
+            change(){
+
             },
             setSellStyle({row, column, rowIndex, columnIndex}) {
                 if (columnIndex == 0) return "borderRadius: 10px  0 0 10px"
@@ -163,7 +171,7 @@
   }
 
   /deep/ .el-dialog__header {
-    background-color: #000;
+    background-color: #189e90;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     padding: 20px;
