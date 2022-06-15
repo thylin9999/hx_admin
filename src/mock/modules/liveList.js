@@ -15,6 +15,7 @@ const liveList = config => {
                 status: false,
                 recommend: true,
                 line: 1, //1在线 2下线
+                liveRecord: '2022-10-08 2:00',
                 cover: 'https://image.jqiu66.com/status/upload/624be422dd98c.jpeg',
                 createTime: '2022-10-08 2:00',
                 recentOpenTime: '2022-10-08 2:00',
@@ -29,6 +30,7 @@ const liveList = config => {
                 status: false,
                 recommend: 2,
                 line: 2, //1在线 2下线
+                liveRecord: '2022-10-08 2:00',
                 cover: 'https://image.jqiu66.com/status/upload/624be422dd98c.jpeg',
                 createTime: '2022-10-08 2:00',
                 recentOpenTime: '2022-10-08 2:00',

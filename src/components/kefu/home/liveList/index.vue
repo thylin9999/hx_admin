@@ -27,6 +27,7 @@
                     {{scope.row.line === 1 ? '在线' : '离线'}}
                 </template>
             </el-table-column>
+            <el-table-column prop="liveRecord" label="直播记录"></el-table-column>
             <el-table-column prop="createTime" label="创建时间"></el-table-column>
             <el-table-column prop="recentOpenTime" label="最近开播时间"></el-table-column>
             <el-table-column prop="visitNum" label="访问人数"></el-table-column>
