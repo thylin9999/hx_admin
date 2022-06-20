@@ -1,13 +1,23 @@
 import request from "../request"
 import url from "./url"
 
-export function login(user, pwd) {  //登录
+
+export function login(account, password) {  //登录
     return request({
         method: "post",
-        url: url.login,
-        params: {
-            user,
-            pwd
+        url: apiUrl + url.login,
+        data: {
+            account,
+            password
+        }
+    })
+}
+export function getAdminList(pageNum,pageSize,account) {  //管理员列表
+    return request({
+        method: "post",
+        url: apiUrl + url.adminList,
+        data: {
+            pageNum,pageSize,account
         }
     })
 }

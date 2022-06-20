@@ -99,8 +99,9 @@
         methods: {
             async init() {
                 this.loading = true
+                let account = JSON.parse(localStorage.getItem("userInfo"))
                 try {
-                    let {data} = await getAdminList()
+                    let {data} = await getAdminList(1,1000,account.account)
                     console.log(data)
                     if (data.code === statusCode.success) {
                         data.data.length && data.data.forEach((item, i) => {

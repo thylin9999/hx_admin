@@ -1,6 +1,6 @@
 const url = {
     home: '/api/v1/control/home',
-    adminList: '/api/v1/control/adminList',
+    adminList:'/admin/admin/lists',  //管理员列表
     anchorList: '/api/v1/control/anchorList',
     memberList: '/api/v1/control/memberList',
     matchList: '/api/v1/control/matchList',
@@ -10,7 +10,6 @@ const url = {
     announceManage: '/api/v1/control/announceManage',
     feedbackManage:'/api/v1/control/feedbackManage',
     webSet: '/api/v1/control/webSet',
-
 }
 
 export default url

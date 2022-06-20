@@ -55,36 +55,16 @@
         },
         methods: {
             handleSelect(key, keyPath) {
-                console.log(key, keyPath);
                 this.index = key
                 this.page = this.leftList[key].path
-                this.topList[0].title = this.leftList[key].title
+                this.leftList[0].title = this.leftList[key].title
             },
             leftSelect(item) {
-                console.log(item.index,item.path)
-                this.index = item.index
-                this.page = item.path
-                this.topList[0].title = item.title
             },
             logout() {
-                console.log('logout')
             },
             getGroup() {
-                this.axios({
-                    url: `${apiUrl}/admin/customerGroup/lists`,
-                    method: 'post',
-                    data: {
-                        token: this.adminInfo.token,
-                        uid: this.adminInfo.data.id
-                    }
-                }).then(res => {
-                    if (res.data.code == 20000) {
-                        this.groupList = res.data.data
-                        localStorage.setItem("groupList", JSON.stringify(res.data.data))
-                    }
-                }).catch(err => {
-                    this.$message.error('数据获取失败');
-                })
+
             },
         },
     }

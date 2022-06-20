@@ -11,13 +11,12 @@ export function home(t) {   //首页数据
     })
 }
 
-export function getAdminList(token, uid) { //管理员列表
+export function getAdminList(pageNum,pageSize,account) { //管理员列表
     return request({
         method: 'post',
-        url: url.adminList,
-        params: {
-            token,
-            uid
+        url: apiUrl + url.adminList,
+        data: {
+            pageNum,pageSize,account
         }
     })
 }
