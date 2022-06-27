@@ -11,12 +11,15 @@ export function home(t) {   //首页数据
     })
 }
 
+
+
 export function getAdminList(pageNum,pageSize,account) { //管理员列表
+    let token = localStorage.getItem("token")
     return request({
         method: 'post',
         url: apiUrl + url.adminList,
         data: {
-            pageNum,pageSize,account
+            pageNum,pageSize,account,token
         }
     })
 }

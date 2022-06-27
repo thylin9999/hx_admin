@@ -13,11 +13,12 @@
                 password: "",
                 bg: require("@assets/bg.jpg"),
                 bg1: require("@assets/kefu/bg.jpg"),
-                checked: false
+                checked: false,
+                userInfo: null,
             }
         },
         methods: {
-           async login() {
+            async login() {
                 const loading = this.$loading({
                     lock: true,
                     text: '登录中',
@@ -25,11 +26,12 @@
                     background: 'rgba(0, 0, 0, 0.7)'
                 });
                 try {
-                    let {data} = await login(this.username,this.password)
-                    console.log(data)
+                    let {data} = await login(this.username, this.password)
                     if (data.code === statusCode.success) {
-                      localStorage.setItem('token',data.token)
-                      localStorage.setItem('userInfo',JSON.stringify(data.data))
+                        this.userInfo = data.data
+                        this.userInfo.token = data.token
+                        localStorage.setItem('token', data.token)
+                        localStorage.setItem('userInfo', JSON.stringify(data.data))
                         this.$message({
                             message: '登录成功',
                             type: 'success',
@@ -39,12 +41,12 @@
                             this.$router.push({name: 'Home'})
                         }, 500)
 
-                    }else{
-                      this.$message({
-                        message: data.msg,
-                        type: 'warning',
-                        duration: 1000
-                      });
+                    } else {
+                        this.$message({
+                            message: data.msg,
+                            type: 'warning',
+                            duration: 1000
+                        });
                     }
                     loading.close();
                 } catch (e) {

@@ -48,10 +48,12 @@
                 ],
                 defaultIndex: '0',
                 index: 1,
+                userInfo: {},
             }
         },
         mounted() {
             this.getGroup()
+            this.userInfo = JSON.parse(JSON.stringify(localStorage.getItem('userInfo')))
         },
         methods: {
             handleSelect(key, keyPath) {

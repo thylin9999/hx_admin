@@ -1,16 +1,16 @@
 <template>
     <div>
-<!--        <el-button style="float: right;border-radius: 10px;margin-bottom: 5px;background-color: #189e90;color: #fff"-->
-<!--                   @click="addDialog = true">新增管理员+-->
-<!--        </el-button>-->
+        <!--        <el-button style="float: right;border-radius: 10px;margin-bottom: 5px;background-color: #189e90;color: #fff"-->
+        <!--                   @click="addDialog = true">新增管理员+-->
+        <!--        </el-button>-->
         <div class="topBtnList">
-            <button class="btnAdd"  @click="addDialog = true">新增管理员</button>
+            <button class="btnAdd" @click="handleEdit">新增管理员</button>
         </div>
         <el-table :cell-style="setSellStyle" :span="24" :row-style="{height:'58px'}" :header-row-style="{height:'40px'}"
                   v-loading="loading" ref="multipleTable" tooltip-effect="dark" :data="tableData" border
                   style="width: 100%">
             <el-table-column type="index" label="序号"></el-table-column>
-            <el-table-column prop="username" label="管理员"></el-table-column>
+            <el-table-column prop="account" label="管理员"></el-table-column>
             <el-table-column prop="create_time" label="创建时间"></el-table-column>
             <el-table-column prop="last_time" label="登录时间"></el-table-column>
             <el-table-column prop="last_ip" label="登录ip"></el-table-column>
@@ -26,11 +26,12 @@
                     </el-switch>
                 </template>
             </el-table-column>
-            <el-table-column prop="createMan" label="操作人"></el-table-column>
+            <el-table-column prop="update_by" label="操作人"></el-table-column>
             <el-table-column prop="username" label="操作">
                 <template slot-scope="scope">
-<!--                    <button class="btnDetail" @click="handleEdit(scope.$index, scope.row)" type="text">编辑</button>-->
-                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit" circle></el-button>
+                    <!--                    <button class="btnDetail" @click="handleEdit(scope.$index, scope.row)" type="text">编辑</button>-->
+                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit"
+                               circle></el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -54,15 +55,15 @@
         <el-dialog title="编辑/新增" :visible.sync="addDialog" width="20%">
             <el-form :model="form">
                 <el-form-item label="账号">
-                    <el-input disabled v-model="form.username" placeholder="管理员账号"></el-input>
+                    <el-input :disabled="form.account?true :false" v-model="form.account" placeholder="管理员账号"></el-input>
                 </el-form-item>
                 <el-form-item label="密码">
                     <el-input v-model="form.password" placeholder="管理员密码"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-<!--                <button class="btnCancle" @click="addDialog = false">取 消</button>-->
-<!--                <button class="btnSubmit" type="primary" @click="submit()">提 交</button>-->
+                <!--                <button class="btnCancle" @click="addDialog = false">取 消</button>-->
+                <!--                <button class="btnSubmit" type="primary" @click="submit()">提 交</button>-->
 
                 <el-button type="primary" @click="submit()">提交</el-button>
                 <el-button @click="addDialog = false">取消</el-button>
@@ -76,6 +77,14 @@
     import {statusCode} from "@/util/statusCode";
 
     export default {
+        props: {
+            userInfo: {
+                type: [Object, String],
+                default: function () {
+                    return {}
+                }
+            }
+        },
         name: 'adminList',
         data() {
             return {
@@ -88,7 +97,7 @@
                 isComAdminPop: false,
                 addDialog: false,
                 form: {
-                    username: '',
+                    account: '',
                     password: '',
                 },
             }
@@ -101,11 +110,10 @@
                 this.loading = true
                 let account = JSON.parse(localStorage.getItem("userInfo"))
                 try {
-                    let {data} = await getAdminList(1,1000,account.account)
-                    console.log(data)
+                    let {data} = await getAdminList(1, 1000, account.account)
                     if (data.code === statusCode.success) {
-                        data.data.length && data.data.forEach((item, i) => {
-                            this.tableData = JSON.parse(JSON.stringify(data.data))
+                        data.rows.length && data.rows.forEach((item, i) => {
+                            this.tableData = JSON.parse(JSON.stringify(data.rows))
                         })
                         this.loading = false
                     }
@@ -119,8 +127,14 @@
             },
             handleEdit(index, row) {
                 this.addDialog = true
-                this.currentId = row.id
-                this.form.username = row.username
+                if(row){
+                    this.currentId = row.id
+                    this.form.account = row.account
+                    this.form.username = row.username
+                }else{
+                    this.form = {}
+                }
+
             },
             handleDelete(index, row) {
                 this.$confirm(`此操作将永久删除管理员【${row.username}】, 是否继续?`, '提示', {
@@ -131,7 +145,9 @@
                 })
             },
             submit() {
-                console.log(this.currentId)
+                // console.log(this.currentId)
+                console.log("-----------form---------")
+                console.log(this.form)
             },
             changeSwitch(item) {
                 console.log(item.id, item.status)
