@@ -17,44 +17,39 @@
             }
         },
         methods: {
-            login() {
+           async login() {
                 const loading = this.$loading({
                     lock: true,
                     text: '登录中',
                     spinner: 'el-icon-loading',
                     background: 'rgba(0, 0, 0, 0.7)'
                 });
-                // try {
-                //     let {data} = await login()
-                //     console.log(data)
-                //     if (data.code === statusCode.success) {
-                //         this.$message({
-                //             message: '登录成功',
-                //             type: 'success',
-                //             duration: 1000
-                //         });
-                //         setTimeout(() => {
-                //             this.$router.push({name: 'Home'})
-                //         }, 500)
-                //     }
-                //     loading.close();
-                // } catch (e) {
-                //     console.log('error---error')
-                // }
-                loading.close();
-                this.$router.push({name: 'Home'})
-                // setTimeout({
-                //     // if (1) {
-                //     // this.$message({
-                //     //     message: '登录成功',
-                //     //     type: 'success',
-                //     //     duration: 1000
-                //     // })
-                //     // this.$router.push({name: 'Home'})
-                //     // } else {
-                //     // this.$message.error(res.data.msg);
-                //     //  }
-                // }, 1500)
+                try {
+                    let {data} = await login(this.username,this.password)
+                    console.log(data)
+                    if (data.code === statusCode.success) {
+                      localStorage.setItem('token',data.token)
+                      localStorage.setItem('userInfo',JSON.stringify(data.data))
+                        this.$message({
+                            message: '登录成功',
+                            type: 'success',
+                            duration: 1000
+                        });
+                        setTimeout(() => {
+                            this.$router.push({name: 'Home'})
+                        }, 500)
+
+                    }else{
+                      this.$message({
+                        message: data.msg,
+                        type: 'warning',
+                        duration: 1000
+                      });
+                    }
+                    loading.close();
+                } catch (e) {
+                    console.log('error---error')
+                }
             }
         }
     }
