@@ -22,7 +22,7 @@
                             active-color="#ccc"
                             inactive-color="green"
                             @change="changeSwitch(scope.row)"
-                            v-model="scope.row.status">
+                            v-model="scope.row.status == 1">
                     </el-switch>
                 </template>
             </el-table-column>
@@ -35,27 +35,27 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-dialog :title="isEditTxt" :visible.sync="dialogFormVisible">
-            <el-form :model="form">
-                <el-form-item label="账号">
-                    <el-input disabled v-model="form.username"></el-input>
-                </el-form-item>
-                <el-form-item label="密码">
-                    <el-input v-model="form.password" placeholder="不填写则默认当前"></el-input>
-                </el-form-item>
-            </el-form>
-            <el-switch v-if="!isComAdminPop" v-model="value" active-text="开启" inactive-text="禁用" active-color="#409EFF"
-                       inactive-color="#DCDFE6">
-            </el-switch>
-            <div slot="footer" class="dialog-footer">
-                <button class="btnCancle" @click="dialogFormVisible = false">取 消</button>
-                <button class="btnSubmit" @click="submit">提 交</button>
-            </div>
-        </el-dialog>
+<!--        <el-dialog :title="isEditTxt" :visible.sync="dialogFormVisible">-->
+<!--            <el-form :model="form">-->
+<!--                <el-form-item label="账号">-->
+<!--                    <el-input disabled v-model="form.username"></el-input>-->
+<!--                </el-form-item>-->
+<!--                <el-form-item label="密码">-->
+<!--                    <el-input v-model="form.password" placeholder="不填写则默认当前"></el-input>-->
+<!--                </el-form-item>-->
+<!--            </el-form>-->
+<!--            <el-switch v-if="!isComAdminPop" v-model="value" active-text="开启" inactive-text="禁用" active-color="#409EFF"-->
+<!--                       inactive-color="#DCDFE6">-->
+<!--            </el-switch>-->
+<!--            <div slot="footer" class="dialog-footer">-->
+<!--                <button class="btnCancle" @click="dialogFormVisible = false">取 消</button>-->
+<!--                <button class="btnSubmit" @click="submit">提 交</button>-->
+<!--            </div>-->
+<!--        </el-dialog>-->
         <el-dialog title="编辑/新增" :visible.sync="addDialog" width="20%">
             <el-form :model="form">
                 <el-form-item label="账号">
-                    <el-input :disabled="form.account?true :false" v-model="form.account" placeholder="管理员账号"></el-input>
+                    <el-input :disabled="type ==='edit'?true :false" v-model="form.account" placeholder="管理员账号"></el-input>
                 </el-form-item>
                 <el-form-item label="密码">
                     <el-input v-model="form.password" placeholder="管理员密码"></el-input>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-    import {getAdminList} from "@/api/control";
+import {getAdminList,addAdmin, updatePwd,updateAdmin} from "@/api/control";
     import {statusCode} from "@/util/statusCode";
 
     export default {
@@ -88,6 +88,7 @@
         name: 'adminList',
         data() {
             return {
+                type:'edit',   // edit add
                 currentId: '',
                 loading: true,
                 value: true,
@@ -110,7 +111,7 @@
                 this.loading = true
                 let account = JSON.parse(localStorage.getItem("userInfo"))
                 try {
-                    let {data} = await getAdminList(1, 1000, account.account)
+                    let {data} = await getAdminList(1, 1000)
                     if (data.code === statusCode.success) {
                         data.rows.length && data.rows.forEach((item, i) => {
                             this.tableData = JSON.parse(JSON.stringify(data.rows))
@@ -128,10 +129,12 @@
             handleEdit(index, row) {
                 this.addDialog = true
                 if(row){
+                    this.type = 'edit'
                     this.currentId = row.id
                     this.form.account = row.account
-                    this.form.username = row.username
+                    // this.form.password = row.password
                 }else{
+                    this.type = 'add'
                     this.form = {}
                 }
 
@@ -144,13 +147,56 @@
                 }).then(() => {
                 })
             },
-            submit() {
-                // console.log(this.currentId)
-                console.log("-----------form---------")
-                console.log(this.form)
+          async submit() {
+              if(this.type === 'add'){
+                  let {data} = await addAdmin(this.form.account, this.form.password, 1,1)
+                  let msg = ''
+                  let type = 'success'
+                  if (data.code === statusCode.success) {
+                    msg = '操作成功'
+                    this.addDialog = false
+                    this.init()
+                  }else{
+                    msg = data.msg
+                    type = 'warning'
+                  }
+                  this.$message({
+                    message: msg,
+                    type,
+                    duration: 2000
+                  });
+              }else{
+                  let {data} = await updatePwd(this.currentId,this.form.password)
+                  let msg = ''
+                  let type = 'success'
+                  if (data.code === statusCode.success) {
+                    msg = '操作成功'
+                    this.addDialog = false
+                    this.init()
+                  }else{
+                    msg = data.msg
+                    type = 'warning'
+                  }
+                  this.$message({
+                    message: msg,
+                    type,
+                    duration: 2000
+                  });
+              }
             },
-            changeSwitch(item) {
-                console.log(item.id, item.status)
+           async changeSwitch(item) {
+                 console.log(item.id, !item.status)
+                 let msg = ''
+                 let type = 'success'
+                 let {data} = await updateAdmin(item.id, item.status ? 1 : 2)
+                 if (data.code === statusCode.success) {
+                   msg = '操作成功'
+                   this.addDialog = false
+                   // this.init()
+                 }else{
+                   msg = data.msg
+                   type = 'warning'
+                 }
             }
         }
     }

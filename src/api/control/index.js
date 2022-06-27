@@ -11,15 +11,46 @@ export function home(t) {   //首页数据
     })
 }
 
-
-
-export function getAdminList(pageNum,pageSize,account) { //管理员列表
+export function getAdminList(pageNum,pageSize) { //管理员列表
     let token = localStorage.getItem("token")
     return request({
         method: 'post',
         url: apiUrl + url.adminList,
         data: {
-            pageNum,pageSize,account,token
+            pageNum,pageSize,token
+        }
+    })
+}
+
+export function addAdmin(account,password,group_id,status) { //新增管理员
+    let token = localStorage.getItem("token")
+    return request({
+        method: 'post',
+        url: apiUrl + url.addAdmin,
+        data: {
+            account,password,group_id,status,token
+        }
+    })
+}
+
+export function updatePwd(id,password) { //修改管理员密码
+    let token = localStorage.getItem("token")
+    return request({
+        method: 'post',
+        url: apiUrl + url.updatePwd,
+        data: {
+            id,password,token
+        }
+    })
+}
+
+export function updateAdmin(id,status) { //管理员状态管理
+    let token = localStorage.getItem("token")
+    return request({
+        method: 'post',
+        url: apiUrl + url.updateAdmin,
+        data: {
+            id,status,token
         }
     })
 }
@@ -31,6 +62,7 @@ export function getAnchorList() { //主播列表
         params: {}
     })
 }
+
 export function getMemberList() { //会员列表
     return request({
         method: 'post',
