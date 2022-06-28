@@ -56,12 +56,10 @@
             this.userInfo = JSON.parse(JSON.stringify(localStorage.getItem('userInfo')))
         },
         methods: {
-            handleSelect(key, keyPath) {
-                this.index = key
-                this.page = this.leftList[key].path
-                this.leftList[0].title = this.leftList[key].title
-            },
             leftSelect(item) {
+                this.index = item.index
+                this.page = item.path
+                // this.leftList[0].title = item.title
             },
             logout() {
             },

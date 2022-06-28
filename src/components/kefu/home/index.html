@@ -1,53 +1,77 @@
 <div id="home">
     <div class="content">
-        <el-menu background-color="#545c64"
-                 text-color="#fff"
-                 active-text-color="#ffd04b"
-                 :default-active="defaultIndex"
-                 class="el-menu-demo"
-                 mode="horizontal"
-                 @select="handleSelect">
-            <el-menu-item :index="String(item.index)" v-for="(item,i) in leftList" :key="i">{{item.title}}
-            </el-menu-item>
-        </el-menu>
-        <div class="line"></div>
-        <div class="box">
-            <div class="visitData" v-if="page === 'home'">
-                <h1>首页. . .</h1>
-                <div class="bot">
-
+        <el-container>
+            <el-aside width="160px">
+                <div class="left">
+                    <el-row class="tac">
+                        <el-col style="padding-top: 20px">
+                            <el-menu :default-active="defaultIndex" class="el-menu-vertical-demo"
+                                     background-color="#000" text-color="#fff">
+                                <el-menu-item :index="''+i" v-for="(item,i) in leftList" :key="i"
+                                              :disabled="item.path == 'top'" @click="leftSelect(item)">
+                                    <img class="logo" v-if="item.path == 'top'" :src="logo"/>
+                                    <div v-else v-show="i == index"
+                                         style="width: 6px; height: 6px;border-radius: 3px; background-color: #ff4600;display: inline-block;margin:0 15px;">
+                                    </div>
+                                    <span slot="title">{{item.title}}</span>
+                                </el-menu-item>
+                            </el-menu>
+                        </el-col>
+                    </el-row>
                 </div>
-            </div>
-            <template v-else-if="page === 'adminList'">
-                <AdminList :userInfo="userInfo"></AdminList>
-            </template>
-            <template v-else-if="page === 'anchorList'">
-                <AnchorList></AnchorList>
-            </template>
-            <template v-else-if="page === 'memberList'">
-                <MemberList :groupList="groupList" :adminInfo="adminInfo"></MemberList>
-            </template>
-            <template v-else-if="page === 'matchList'">
-                <MatchList :groupList="groupList" :adminInfo="adminInfo"></MatchList>
-            </template>
-            <template v-else-if="page === 'liveList'">
-                <LiveList :adminInfo="adminInfo"></LiveList>
-            </template>
-            <template v-else-if="page === 'contentManage'">
-                <ContentManage></ContentManage>
-            </template>
-            <template v-else-if="page === 'advManage'">
-                <AdvManage></AdvManage>
-            </template>
-            <template v-else-if="page === 'announceManage'">
-                <AnnounceManage></AnnounceManage>
-            </template>
-            <template v-else-if="page === 'feedbackManage'">
-                <FeedbackManage></FeedbackManage>
-            </template>
-            <template v-else-if="page=== 'webSet'">
-                <WebSet></WebSet>
-            </template>
-        </div>
+            </el-aside>
+            <el-container style="background-color: #f6f6f6">
+                <el-header class="hradTxt">
+                    <div class="top_title">
+                        {{leftList[index].title}}
+                    </div>
+                    <div v-if="page == 'home'" class="username" style="float: right">
+                        管理员账号:
+                        <span style="cursor: pointer">{{userInfo.username}}</span>
+                        <button class="btn" @click="logout">退出</button>
+                    </div>
+                </el-header>
+                <el-main>
+                    <div class="box" style="height:100%">
+                        <div class="visitData" v-if="page === 'home'">
+                            <h1>首页. . .</h1>
+                            <div class="bot">
+
+                            </div>
+                        </div>
+                        <template v-else-if="page === 'adminList'">
+                            <AdminList :userInfo="userInfo"></AdminList>
+                        </template>
+                        <template v-else-if="page === 'anchorList'">
+                            <AnchorList></AnchorList>
+                        </template>
+                        <template v-else-if="page === 'memberList'">
+                            <MemberList :groupList="groupList" :adminInfo="adminInfo"></MemberList>
+                        </template>
+                        <template v-else-if="page === 'matchList'">
+                            <MatchList :groupList="groupList" :adminInfo="adminInfo"></MatchList>
+                        </template>
+                        <template v-else-if="page === 'liveList'">
+                            <LiveList :adminInfo="adminInfo"></LiveList>
+                        </template>
+                        <template v-else-if="page === 'contentManage'">
+                            <ContentManage></ContentManage>
+                        </template>
+                        <template v-else-if="page === 'advManage'">
+                            <AdvManage></AdvManage>
+                        </template>
+                        <template v-else-if="page === 'announceManage'">
+                            <AnnounceManage></AnnounceManage>
+                        </template>
+                        <template v-else-if="page === 'feedbackManage'">
+                            <FeedbackManage></FeedbackManage>
+                        </template>
+                        <template v-else-if="page=== 'webSet'">
+                            <WebSet></WebSet>
+                        </template>
+                    </div>
+                </el-main>
+            </el-container>
+        </el-container>
     </div>
 </div>
