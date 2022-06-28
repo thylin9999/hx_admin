@@ -5,9 +5,15 @@ const url = {
     updatePwd:'/admin/admin/updatePwd',  //修改管理员密码
     updateAdmin:'/admin/admin/updateAdmin',  //管理员状态管理
 
+    anchorList: '/admin/anchor/lists',
+    updateAnchor: '/admin/anchor/updateAnchor',
 
-    anchorList: '/api/v1/control/anchorList',
-    memberList: '/api/v1/control/memberList',
+    memberList: '/admin/member/lists',
+    addMember: '/admin/member/addMember',
+
+
+
+
     matchList: '/api/v1/control/matchList',
     liveList: '/api/v1/control/liveList',
     contentList: '/api/v1/control/contentList',

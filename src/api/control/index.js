@@ -11,63 +11,102 @@ export function home(t) {   //首页数据
     })
 }
 
-export function getAdminList(pageNum,pageSize) { //管理员列表
+export function getAdminList(pageNum, pageSize) { //管理员列表
     let token = localStorage.getItem("token")
     return request({
         method: 'post',
         url: apiUrl + url.adminList,
         data: {
-            pageNum,pageSize,token
+            pageNum, pageSize, token
         }
     })
 }
 
-export function addAdmin(account,password,group_id,status) { //新增管理员
+export function addAdmin(account, password, group_id, status) { //新增管理员
     let token = localStorage.getItem("token")
     return request({
         method: 'post',
         url: apiUrl + url.addAdmin,
         data: {
-            account,password,group_id,status,token
+            account, password, group_id, status, token
         }
     })
 }
 
-export function updatePwd(id,password) { //修改管理员密码
+export function updatePwd(id, password) { //修改管理员密码
     let token = localStorage.getItem("token")
     return request({
         method: 'post',
         url: apiUrl + url.updatePwd,
         data: {
-            id,password,token
+            id, password, token
         }
     })
 }
 
-export function updateAdmin(id,status) { //管理员状态管理
+export function updateAdmin(id, status) { //管理员状态管理
     let token = localStorage.getItem("token")
     return request({
         method: 'post',
         url: apiUrl + url.updateAdmin,
         data: {
-            id,status,token
+            id, status, token
         }
     })
 }
 
 export function getAnchorList() { //主播列表
+    let token = localStorage.getItem("token")
     return request({
         method: 'post',
-        url: url.anchorList,
-        params: {}
+        url: apiUrl + url.anchorList,
+        data: {
+            token
+        }
+    })
+}
+
+export function addAnchor(member_id) { //新增主播
+    let token = localStorage.getItem("token")
+    return request({
+        method: 'post',
+        url: apiUrl + url.anchorList,
+        data: {
+            member_id, token
+        }
+    })
+}
+
+export function updateAnchor(id, status) { //编辑主播
+    let token = localStorage.getItem("token")
+    return request({
+        method: 'post',
+        url: apiUrl + url.updateAnchor,
+        data: {
+            id, status, token
+        }
     })
 }
 
 export function getMemberList() { //会员列表
+    let token = localStorage.getItem("token")
     return request({
         method: 'post',
-        url: url.memberList,
-        params: {}
+        url: apiUrl + url.memberList,
+        data: {
+            token
+        }
+    })
+}
+
+export function addMember(account, nickname, password) { //会员列表
+    let token = localStorage.getItem("token")
+    return request({
+        method: 'post',
+        url: apiUrl + url.addMember,
+        data: {
+            account, nickname, password, token
+        }
     })
 }
 

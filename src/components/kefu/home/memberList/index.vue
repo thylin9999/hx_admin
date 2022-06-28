@@ -10,7 +10,7 @@
                 tooltip-effect="dark"
                 :data="tableData" border
                 style="width: 100%">
-            <el-table-column type="selection" width="55"></el-table-column>
+            <!--            <el-table-column type="selection" width="55"></el-table-column>-->
             <el-table-column type="index" label="序号"></el-table-column>
             <el-table-column prop="account" label="账号"></el-table-column>
             <el-table-column prop="nickname" label="昵称"></el-table-column>
@@ -32,16 +32,18 @@
 
             <el-table-column prop="opt" label="操作" width="200">
                 <template slot-scope="scope">
-<!--                    <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)">编辑</button>-->
-                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit" circle></el-button>
-                    <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete" circle></el-button>
+                    <!--                    <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)">编辑</button>-->
+                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit"
+                               circle></el-button>
+                    <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete"
+                               circle></el-button>
                 </template>
             </el-table-column>
         </el-table>
         <el-dialog title="编辑/修改" :visible.sync="dialogFormVisible" width="35%">
             <el-form :model="form">
                 <el-form-item label="账号" :label-width="formLabelWidth">
-                    <el-input disabled :disabled="popupType === 'edit'" v-model="form.username"
+                    <el-input disabled :disabled="popupType === 'edit'" v-model="form.account"
                               autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="昵称" :label-width="formLabelWidth">
@@ -55,8 +57,8 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-<!--                <button class="btnCancle" @click="dialogFormVisible = false">取 消</button>-->
-<!--                <button class="btnSubmit" type="primary" @click="submit">提 交</button>-->
+                <!--                <button class="btnCancle" @click="dialogFormVisible = false">取 消</button>-->
+                <!--                <button class="btnSubmit" type="primary" @click="submit">提 交</button>-->
 
                 <el-button type="primary" @click="submit()">提交</el-button>
                 <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -67,7 +69,7 @@
 </template>
 
 <script>
-    import {getMemberList} from "@/api/control";
+    import {getMemberList, addMember, addAdmin} from "@/api/control";
     import {statusCode} from "@/util/statusCode";
 
     export default {
@@ -78,7 +80,7 @@
                 selectList: [],
                 dialogFormVisible: false,
                 form: {
-                    username: '',
+                    account: '',
                     nickname: '',
                     password: "",
                 },
@@ -103,7 +105,7 @@
                     let {data} = await getMemberList()
                     console.log(data)
                     if (data.code === statusCode.success) {
-                        this.tableData = JSON.parse(JSON.stringify(data.data))
+                        if (data.rows && data.rows.length) this.tableData = JSON.parse(JSON.stringify(data.data))
                         this.loading = false
                     }
                 } catch (e) {
@@ -122,7 +124,7 @@
                 this.dialogFormVisible = true
                 this.popupType = "edit"
                 this.form = {
-                    username: row.username,
+                    account: row.account,
                     nickname: row.nickname,
                     password: row.password,
                 }
@@ -135,8 +137,23 @@
                 }).then(() => {
                 })
             },
-            submit() {
-                console.log(this.form)
+            async submit() {
+                let {data} = await addMember(this.form.account, this.form.nickname, this.form.password)
+                let msg = ''
+                let type = 'success'
+                if (data.code === statusCode.success) {
+                    msg = '操作成功'
+                    this.dialogFormVisible = false
+                    this.init()
+                } else {
+                    msg = data.msg
+                    type = 'warning'
+                }
+                this.$message({
+                    message: msg,
+                    type,
+                    duration: 2000
+                });
             },
             changeSwitch(item) {
                 console.log(item.id, item.status)

@@ -109,7 +109,6 @@ import {getAdminList,addAdmin, updatePwd,updateAdmin} from "@/api/control";
         methods: {
             async init() {
                 this.loading = true
-                let account = JSON.parse(localStorage.getItem("userInfo"))
                 try {
                     let {data} = await getAdminList(1, 1000)
                     if (data.code === statusCode.success) {
