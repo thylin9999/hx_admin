@@ -6,6 +6,7 @@ const url = {
     updateAdmin:'/admin/admin/updateAdmin',  //管理员状态管理
 
     anchorList: '/admin/anchor/lists',
+    addAnchor: '/admin/anchor/addAnchor',
     updateAnchor: '/admin/anchor/updateAnchor',
 
     memberList: '/admin/member/lists',

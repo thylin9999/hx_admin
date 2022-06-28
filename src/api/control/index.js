@@ -61,7 +61,7 @@ export function getAnchorList() { //主播列表
 export function addAnchor(member_id) { //新增主播
     return request({
         method: 'post',
-        url: apiUrl + url.anchorList,
+        url: apiUrl + url.addAnchor,
         data: {
             member_id
         }
