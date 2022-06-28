@@ -17,10 +17,10 @@
             <el-table-column prop="status" label="状态">
                 <template slot-scope="scope">
                     <el-switch
-                            active-text="禁用"
-                            inactive-text="正常"
-                            active-color="#ccc"
-                            inactive-color="green"
+                            active-text="正常"
+                            inactive-text="禁用"
+                            active-color="green"
+                            inactive-color="#ccc"
                             @change="changeSwitch(scope.row)"
                             v-model="scope.row.status == 1">
                     </el-switch>
@@ -188,11 +188,11 @@ import {getAdminList,addAdmin, updatePwd,updateAdmin} from "@/api/control";
                  console.log(item.id, !item.status)
                  let msg = ''
                  let type = 'success'
-                 let {data} = await updateAdmin(item.id, item.status ? 1 : 2)
+                 let {data} = await updateAdmin(item.id, item.status == 1 ? 2 : 1)
                  if (data.code === statusCode.success) {
                    msg = '操作成功'
                    this.addDialog = false
-                   // this.init()
+                   this.init()
                  }else{
                    msg = data.msg
                    type = 'warning'
