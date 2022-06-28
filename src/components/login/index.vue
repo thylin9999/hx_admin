@@ -3,6 +3,7 @@
 <script>
     import {statusCode} from "../../util/statusCode";
     import {login} from "../../api/user/index"
+    import {setToken} from "../../util/cookie"
 
     export default {
         name: "login",
@@ -32,6 +33,7 @@
                         this.userInfo.token = data.token
                         localStorage.setItem('token', data.token)
                         localStorage.setItem('userInfo', JSON.stringify(data.data))
+                        setToken(data.token)
                         this.$message({
                             message: '登录成功',
                             type: 'success',

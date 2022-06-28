@@ -29,6 +29,7 @@
 // }
 
 import axios from 'axios'
+import {getToken} from "../util/cookie"
 
 const instance = axios.create({
     timeout: 6000
@@ -38,6 +39,15 @@ const errorHandle = (error) => {
     console.log(error, '出错了')
     return Promise.reject(error)
 }
+
+instance.interceptors.request.use(config => {
+    const token = getToken()
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+    }
+    // 请求拦截器
+    return config
+}, errorHandle)
 
 instance.interceptors.request.use(config => {
     // 请求拦截器
