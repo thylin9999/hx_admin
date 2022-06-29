@@ -92,11 +92,26 @@
                 </el-table-column>
             </el-table>
         </div>
+        <el-dialog title="编辑" :visible.sync="dialog" width="20%">
+            <el-form :model="form">
+                <el-form-item label="账号">
+                    <el-input :disabled="type ==='edit'?true :false" v-model="form.account"
+                              placeholder="管理员账号"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                    <el-input v-model="form.password" placeholder="管理员密码"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="submit()">提交</el-button>
+                <el-button @click="addDialog = false">取消</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-    import {getLeaguesList, editLeaguesList} from "@/api/control";
+    import {getLeaguesList, editLeaguesList, addAdmin, updatePwd} from "@/api/control";
     import {statusCode} from "@/util/statusCode";
 
     export default {
@@ -114,6 +129,9 @@
                     {id: 4, name: '电竞'},
                     {id: 5, name: '其他'},
                 ],
+                form:{
+
+                }
             }
         },
         created() {
@@ -180,7 +198,45 @@
                 }
             },
             handleEdit(index, row) {
+                this.dialog = true
                 console.log(index, row)
+            },
+            async submit() {
+                if (this.type === 'add') {
+                    let {data} = await addAdmin(this.form.account, this.form.password, 1, 1)
+                    let msg = ''
+                    let type = 'success'
+                    if (data.code === statusCode.success) {
+                        msg = '操作成功'
+                        this.addDialog = false
+                        this.init()
+                    } else {
+                        msg = data.msg
+                        type = 'warning'
+                    }
+                    this.$message({
+                        message: msg,
+                        type,
+                        duration: 2000
+                    });
+                } else {
+                    let {data} = await updatePwd(this.currentId, this.form.password)
+                    let msg = ''
+                    let type = 'success'
+                    if (data.code === statusCode.success) {
+                        msg = '操作成功'
+                        this.addDialog = false
+                        this.init()
+                    } else {
+                        msg = data.msg
+                        type = 'warning'
+                    }
+                    this.$message({
+                        message: msg,
+                        type,
+                        duration: 2000
+                    });
+                }
             },
             handleDelete(index, row) {
                 this.$confirm(`删除此项联赛【${row.nameChs}】, 是否继续?`, '提示', {
