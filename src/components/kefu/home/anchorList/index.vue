@@ -46,6 +46,13 @@
             <!--                </template>-->
             <!--            </el-table-column>-->
         </el-table>
+        <div class="block" v-if="total > 10">
+          <el-pagination
+              @current-change="changePage"
+              layout="prev, pager, next"
+              :total="total">
+          </el-pagination>
+        </div>
         <el-dialog title="编辑/新增" :visible.sync="dialogFormVisible" width="35%">
             <el-form :model="form">
                 <el-form-item label="会员ID" :label-width="formLabelWidth">
@@ -77,6 +84,7 @@
     export default {
         data() {
             return {
+                total:0,
                 currentId: '',
                 popupType: '',
                 loading: true,
@@ -93,20 +101,24 @@
             }
         },
         mounted() {
-            this.init()
+            this.init({pageSize:10,pageNum	:1})
         },
         methods: {
-            async init() {
+            async init(dataJson) {
                 this.loading = true
                 try {
-                    let {data} = await getAnchorList()
+                    let {data} = await getAnchorList(dataJson)
                     if (data.code === statusCode.success) {
+                        this.total = data.total
                         this.tableData = JSON.parse(JSON.stringify(data.rows))
                         this.loading = false
                     }
                 } catch (e) {
                     console.log('error--error')
                 }
+            },
+            changePage(val){
+              this.init({pageSize:10,pageNum	:val})
             },
             setSellStyle({columnIndex}) {
                 if (columnIndex == 0) return "borderRadius: 10px  0 0 10px"

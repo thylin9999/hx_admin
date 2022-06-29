@@ -6,16 +6,16 @@ const contentList = config => {
     return Mock.mock({
         code: statusCode.success,
         data: [
-            {
-                title:'内容标题',
-                status:false,
-                content:"content12"
-            },
-            {
-                title:'内容标题1',
-                status:true,
-                content:"content1"
-            },
+            // {
+            //     title:'内容标题',
+            //     status:false,
+            //     content:"content12"
+            // },
+            // {
+            //     title:'内容标题1',
+            //     status:true,
+            //     content:"content1"
+            // },
         ]
     })
 }

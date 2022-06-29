@@ -58,6 +58,13 @@
                 </template>
             </el-table-column>
         </el-table>
+      <div class="block" v-if="total > 10">
+        <el-pagination
+            @current-change="changePage"
+            layout="prev, pager, next"
+            :total="total">
+        </el-pagination>
+      </div>
         <el-dialog title="新增/编辑" :visible.sync="dialog" width="40%">
             <el-form ref="ruleForm" :model="formItem" label-width="100px">
                 <el-form-item label="直播间标题">
@@ -90,6 +97,7 @@
     export default {
         data() {
             return {
+                total:0,
                 loading: true,
                 tableData: [],
                 isEditTxt: "详情/编辑",
@@ -104,21 +112,25 @@
             }
         },
         created() {
-            this.init()
+            this.init({pageSize: 10, pageNum: 1})
         },
         methods: {
-            async init() {
+            async init(dataJson) {
                 this.loading = true
                 try {
-                    let {data} = await getLiveList()
+                    let {data} = await getLiveList(dataJson)
                     console.log(data)
                     if (data.code === statusCode.success) {
+                        this.total = data.total
                         this.tableData = JSON.parse(JSON.stringify(data.rows))
                         this.loading = false
                     }
                 } catch (e) {
                     console.log('error--error')
                 }
+            },
+            changePage(val){
+              this.init({pageSize:10,pageNum	:val})
             },
             setSellStyle({row, column, rowIndex, columnIndex}) {
                 if (columnIndex == 0) return "borderRadius: 10px  0 0 10px"

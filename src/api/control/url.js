@@ -12,6 +12,7 @@ const url = {
     memberList: '/admin/member/lists',//
     addMember: '/admin/member/addMember',//
     updateMember: '/admin/member/updateMember',//
+    deleteMember: '/admin/member/deleteMember',//
 
 
 

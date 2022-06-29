@@ -51,10 +51,11 @@ export function updateAdmin(id, status) { //管理员状态管理
     })
 }
 
-export function getAnchorList() { //主播列表
+export function getAnchorList(data) { //主播列表
     return request({
         method: 'post',
         url: apiUrl + url.anchorList,
+        data
     })
 }
 
@@ -78,38 +79,42 @@ export function updateAnchor(id, status) { //编辑主播
     })
 }
 
-export function getMemberList() { //会员列表
+export function getMemberList(data) { //会员列表
     return request({
         method: 'post',
         url: apiUrl + url.memberList,
+        data
     })
 }
 
-export function addMember(account, nickname, password) { //会员列表
+export function addMember(data) { //会员列表
     return request({
         method: 'post',
         url: apiUrl + url.addMember,
-        data: {
-            account, nickname, password
-        }
+        data
     })
 }
 
-export function updateMember(id, status, nickname, password) { //编辑会员
+export function updateMember(data) { //编辑会员
     return request({
         method: 'post',
         url: apiUrl + url.updateMember,
-        data: {
-            id, status, nickname, password
-        }
+        data
+    })
+}
+export function deleteMember(data) { //删除会员
+    return request({
+        method: 'post',
+        url: apiUrl + url.deleteMember,
+        data
     })
 }
 
-export function getLeaguesList() { //获取联赛列表
+export function getLeaguesList(data) { //获取联赛列表
     return request({
         method: 'post',
         url: apiUrl + url.leaguesList,
-        data: {pageNum: 1, pageSize: 100,}
+        data
     })
 }
 
@@ -121,13 +126,11 @@ export function editLeaguesList(data) { //编辑联赛
     })
 }
 
-export function getLiveList() { //直播列表
+export function getLiveList(data) { //直播列表
     return request({
         method: 'post',
         url: apiUrl + url.liveList,
-        data: {
-            pageNum: 1, pageSize: 2000,
-        }
+        data
     })
 }
 

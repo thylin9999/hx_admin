@@ -7,9 +7,9 @@ if (process.env.VUE_APP_MOCK) {
     // require('./modules/memberList')
     // require('./modules/matchList')
     // require('./modules/liveList')
-    // require('./modules/contentList')
-    // require('./modules/advList')
+    require('./modules/contentList')
+    require('./modules/advList')
     // require('./modules/announceManage')
-    // require('./modules/feedback')
-    // require('./modules/webSet')
+    require('./modules/feedback')
+    require('./modules/webSet')
 }

@@ -41,6 +41,13 @@
                 </template>
             </el-table-column>
         </el-table>
+        <div class="block" v-if="total > 10">
+          <el-pagination
+              @current-change="changePage"
+              layout="prev, pager, next"
+              :total="total">
+          </el-pagination>
+        </div>
         <el-dialog title="编辑/修改" :visible.sync="dialogFormVisible" width="35%">
             <el-form :model="form">
                 <el-form-item label="账号" :label-width="formLabelWidth">
@@ -70,12 +77,13 @@
 </template>
 
 <script>
-    import {getMemberList, addMember, updateMember} from "@/api/control";
+import {getMemberList, addMember, updateMember, deleteMember} from "@/api/control";
     import {statusCode} from "@/util/statusCode";
 
     export default {
         data() {
             return {
+                total:0,
                 currentId:'',
                 popupType: 'add',    //add || edit
                 loading: true,
@@ -98,21 +106,24 @@
             }
         },
         mounted() {
-            this.init()
+            this.init({pageSize: 10, pageNum: 1})
         },
         methods: {
-            async init() {
+            async init(dataJson) {
                 this.loading = true
                 try {
-                    let {data} = await getMemberList()
-                    console.log(data)
+                    let {data} = await getMemberList(dataJson)
                     if (data.code === statusCode.success) {
+                        this.total = data.total
                         if (data.rows && data.rows.length) this.tableData = JSON.parse(JSON.stringify(data.rows))
                         this.loading = false
                     }
                 } catch (e) {
                     console.log('error--error')
                 }
+            },
+            changePage(val){
+              this.init({pageSize:10,pageNum	:val})
             },
             setSellStyle({row, column, rowIndex, columnIndex}) {
                 if (columnIndex == 0) return "borderRadius: 10px  0 0 10px"
@@ -132,17 +143,38 @@
                     password: row.password,
                 }
             },
-            handleDelete(index, row) {
+          handleDelete(index, row) {
                 this.$confirm(`此操作将永久删除会员【${row.account}】, 是否继续?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
-                }).then(() => {
+                }).then( async () => {
+                  let {data} = await deleteMember({member_id:row.member_id})
+                  let msg = ''
+                  let type = 'success'
+                  if (data.code === statusCode.success) {
+                    msg = '操作成功'
+                    this.dialogFormVisible = false
+                    this.init()
+                  } else {
+                    msg = data.msg
+                    type = 'warning'
+                  }
+                  this.$message({
+                    message: msg,
+                    type,
+                    duration: 2000
+                  });
                 })
             },
             async submit() {
                 if(this.popupType === 'add'){
-                    let {data} = await addMember(this.form.account, this.form.nickname, this.form.password)
+                  let dataJson = {
+                    account:  this.form.account,
+                    nickname: this.form.nickname,
+                    password:  this.form.password
+                  }
+                    let {data} = await addMember(dataJson)
                     let msg = ''
                     let type = 'success'
                     if (data.code === statusCode.success) {
@@ -159,7 +191,12 @@
                         duration: 2000
                     });
                 }else{
-                    let {data} = await updateMember(this.currentId,'', this.form.nickname, this.form.password)
+                  let dataJson = {
+                    member_id:  this.currentId,
+                    nickname: this.form.nickname,
+                    password:  this.form.password
+                  }
+                    let {data} = await updateMember(dataJson)
                     let msg = ''
                     let type = 'success'
                     if (data.code === statusCode.success) {
@@ -181,7 +218,7 @@
                 console.log(item.id, !item.status)
                 let msg = ''
                 let type = 'success'
-                let {data} = await updateMember(item.id, item.status == 1 ? 2 : 1)
+                let {data} = await updateMember({member_id:item.member_id, status:item.status == 1 ? 2 : 1})
                 if (data.code === statusCode.success) {
                     msg = '操作成功'
                     this.addDialog = false
