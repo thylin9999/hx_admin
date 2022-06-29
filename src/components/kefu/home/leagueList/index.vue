@@ -1,41 +1,5 @@
 <template>
     <div>
-        <div class="top">
-            <div class="searchTop">
-                <!--                <div>-->
-                <!--                    <el-col :span="16">-->
-                <!--                        <el-select style="width: 100%" v-model="currentType" placeholder="请选择分组">-->
-                <!--                            <el-option-->
-                <!--                                    v-for="item in groupList"-->
-                <!--                                    :key="item.id"-->
-                <!--                                    :label="item.name"-->
-                <!--                                    :value="item.id">-->
-                <!--                            </el-option>-->
-                <!--                        </el-select>-->
-                <!--                    </el-col>-->
-                <!--                    <el-col :span="2" style="margin-left: 5px">-->
-                <!--                        <div class="grid-content bg-purple">-->
-                <!--                            <button class="btnSearch" @click="query('group_id')">赛事分类</button>-->
-                <!--                        </div>-->
-                <!--                    </el-col>-->
-                <!--                </div>-->
-                <!--                <div>-->
-                <!--                    <el-col :span="6" style="line-height: 40px;text-align: center">-->
-                <!--                        赛事名称-->
-                <!--                    </el-col>-->
-                <!--                    <el-col :span="10">-->
-                <!--                        <div class="grid-content bg-purple">-->
-                <!--                            <el-input :span="4" v-model="usernameQuery" placeholder="请输入赛事名称"></el-input>-->
-                <!--                        </div>-->
-                <!--                    </el-col>-->
-                <!--                    <el-col :span="2" style="margin-left: 5px">-->
-                <!--                        <div class="grid-content bg-purple">-->
-                <!--                            <button class="btnSearch" type="primary" @click="query('username')">查询</button>-->
-                <!--                        </div>-->
-                <!--                    </el-col>-->
-                <!--                </div>-->
-            </div>
-        </div>
         <div>
             <el-table :cell-style="setSellStyle" :span="24" :row-style="{height:'58px'}"
                       :header-row-style="{height:'40px'}"
@@ -83,35 +47,34 @@
                 <el-table-column prop="remark" label="备注"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <!--                        <button class="btnDel" @click="handleDelete(scope.$index, scope.row)">删除</button>-->
                         <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit"
                                    circle></el-button>
-                        <!--                        <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete"-->
-                        <!--                                   circle></el-button>-->
                     </template>
                 </el-table-column>
             </el-table>
         </div>
         <el-dialog title="编辑" :visible.sync="dialog" width="20%">
             <el-form :model="form">
-                <el-form-item label="账号">
-                    <el-input :disabled="type ==='edit'?true :false" v-model="form.account"
-                              placeholder="管理员账号"></el-input>
+                <el-form-item label="赛队ID">
+                    <el-input disabled v-model="form.leagueId"></el-input>
                 </el-form-item>
-                <el-form-item label="密码">
-                    <el-input v-model="form.password" placeholder="管理员密码"></el-input>
+                <el-form-item label="赛队简称">
+                    <el-input disabled v-model="form.nameChsShort"></el-input>
+                </el-form-item>
+                <el-form-item label="热门排序">
+                    <el-input v-model="form.sort"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="submit()">提交</el-button>
-                <el-button @click="addDialog = false">取消</el-button>
+                <el-button @click="dialog = false">取消</el-button>
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
-    import {getLeaguesList, editLeaguesList, addAdmin, updatePwd} from "@/api/control";
+    import {getLeaguesList, editLeaguesList} from "@/api/control";
     import {statusCode} from "@/util/statusCode";
 
     export default {
@@ -122,15 +85,10 @@
                 loading: true,
                 tableData: [],
                 dialog: false,
-                groupList: [
-                    {id: 1, name: '全部'},
-                    {id: 2, name: '足球'},
-                    {id: 3, name: '篮球'},
-                    {id: 4, name: '电竞'},
-                    {id: 5, name: '其他'},
-                ],
                 form:{
-
+                  leagueId:'',
+                  nameChsShort:'',
+                  sort:'',
                 }
             }
         },
@@ -151,16 +109,11 @@
                     console.log('error--error')
                 }
             },
-            addAdmin() {
-                this.dialog = true
-            },
             setSellStyle({row, column, rowIndex, columnIndex}) {
                 if (columnIndex == 0) return "borderRadius: 10px  0 0 10px"
                 if (columnIndex == 7) return "borderRadius: 0  10px 10px 0"
             },
             async switchChange(row, num, hierarchy) { //num 1 赛事等级  2 热门设置
-                console.log(row)
-                console.log(hierarchy)
                 if (num === 1) {
                     let {data} = await editLeaguesList({leagueId: row.leagueId, hierarchy})
                     let msg = ''
@@ -199,16 +152,17 @@
             },
             handleEdit(index, row) {
                 this.dialog = true
-                console.log(index, row)
+                this.form.leagueId = row.leagueId
+                this.form.nameChsShort = row.nameChsShort
+                this.form.sort = row.sort
             },
             async submit() {
-                if (this.type === 'add') {
-                    let {data} = await addAdmin(this.form.account, this.form.password, 1, 1)
+                    let {data} = await editLeaguesList(this.form)
                     let msg = ''
                     let type = 'success'
                     if (data.code === statusCode.success) {
                         msg = '操作成功'
-                        this.addDialog = false
+                        this.dialog = false
                         this.init()
                     } else {
                         msg = data.msg
@@ -219,43 +173,11 @@
                         type,
                         duration: 2000
                     });
-                } else {
-                    let {data} = await updatePwd(this.currentId, this.form.password)
-                    let msg = ''
-                    let type = 'success'
-                    if (data.code === statusCode.success) {
-                        msg = '操作成功'
-                        this.addDialog = false
-                        this.init()
-                    } else {
-                        msg = data.msg
-                        type = 'warning'
-                    }
-                    this.$message({
-                        message: msg,
-                        type,
-                        duration: 2000
-                    });
-                }
-            },
-            handleDelete(index, row) {
-                this.$confirm(`删除此项联赛【${row.nameChs}】, 是否继续?`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                })
             },
         }
     }
 </script>
 <style scoped lang="scss">
-
-  .searchTop {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
-  }
 
   .editBtn {
     color: #1e82d2;
