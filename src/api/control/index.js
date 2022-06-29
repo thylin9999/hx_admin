@@ -105,11 +105,19 @@ export function updateMember(id, status, nickname, password) { //编辑会员
     })
 }
 
-export function getLeaguesList() { //
+export function getLeaguesList() { //获取联赛列表
     return request({
         method: 'post',
         url: apiUrl + url.leaguesList,
         data: {pageNum: 1, pageSize: 100,}
+    })
+}
+
+export function editLeaguesList(data) { //编辑联赛
+    return request({
+        method: 'post',
+        url: apiUrl + url.editLeagues,
+        data
     })
 }
 
