@@ -48,8 +48,8 @@
                         <template v-else-if="page === 'memberList'">
                             <MemberList :groupList="groupList" :adminInfo="adminInfo"></MemberList>
                         </template>
-                        <template v-else-if="page === 'matchList'">
-                            <MatchList :groupList="groupList" :adminInfo="adminInfo"></MatchList>
+                        <template v-else-if="page === 'leagueList'">
+                            <LeagueList :groupList="groupList" :adminInfo="adminInfo"></LeagueList>
                         </template>
                         <template v-else-if="page === 'liveList'">
                             <LiveList :adminInfo="adminInfo"></LiveList>

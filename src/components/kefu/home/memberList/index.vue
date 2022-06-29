@@ -13,6 +13,7 @@
             <!--            <el-table-column type="selection" width="55"></el-table-column>-->
             <el-table-column type="index" label="序号"></el-table-column>
             <el-table-column prop="account" label="账号"></el-table-column>
+            <el-table-column prop="member_id" label="ID"></el-table-column>
             <el-table-column prop="nickname" label="昵称"></el-table-column>
             <el-table-column prop="id" label="用户ID"></el-table-column>
             <el-table-column prop="createTime" label="创建时间"></el-table-column>
@@ -20,12 +21,12 @@
             <el-table-column prop="status" label="状态">
                 <template slot-scope="scope" label="状态">
                     <el-switch
-                            active-text="禁用"
-                            inactive-text="正常"
-                            active-color="#ccc"
-                            inactive-color="green"
+                            active-text="正常"
+                            inactive-text="禁用"
+                            active-color="green"
+                            inactive-color="#ccc"
                             @change="changeSwitch(scope.row)"
-                            v-model="scope.row.status">
+                            v-model="scope.row.status == 1">
                     </el-switch>
                 </template>
             </el-table-column>
@@ -69,12 +70,13 @@
 </template>
 
 <script>
-    import {getMemberList, addMember, addAdmin} from "@/api/control";
+    import {getMemberList, addMember, updateMember} from "@/api/control";
     import {statusCode} from "@/util/statusCode";
 
     export default {
         data() {
             return {
+                currentId:'',
                 popupType: 'add',    //add || edit
                 loading: true,
                 selectList: [],
@@ -105,7 +107,7 @@
                     let {data} = await getMemberList()
                     console.log(data)
                     if (data.code === statusCode.success) {
-                        if (data.rows && data.rows.length) this.tableData = JSON.parse(JSON.stringify(data.data))
+                        if (data.rows && data.rows.length) this.tableData = JSON.parse(JSON.stringify(data.rows))
                         this.loading = false
                     }
                 } catch (e) {
@@ -121,6 +123,7 @@
                 this.popupType = "add"
             },
             handleEdit(index, row) {
+                this.currentId = row.member_id
                 this.dialogFormVisible = true
                 this.popupType = "edit"
                 this.form = {
@@ -138,25 +141,55 @@
                 })
             },
             async submit() {
-                let {data} = await addMember(this.form.account, this.form.nickname, this.form.password)
+                if(this.popupType === 'add'){
+                    let {data} = await addMember(this.form.account, this.form.nickname, this.form.password)
+                    let msg = ''
+                    let type = 'success'
+                    if (data.code === statusCode.success) {
+                        msg = '操作成功'
+                        this.dialogFormVisible = false
+                        this.init()
+                    } else {
+                        msg = data.msg
+                        type = 'warning'
+                    }
+                    this.$message({
+                        message: msg,
+                        type,
+                        duration: 2000
+                    });
+                }else{
+                    let {data} = await updateMember(this.currentId,'', this.form.nickname, this.form.password)
+                    let msg = ''
+                    let type = 'success'
+                    if (data.code === statusCode.success) {
+                        msg = '操作成功'
+                        this.dialogFormVisible = false
+                        this.init()
+                    } else {
+                        msg = data.msg
+                        type = 'warning'
+                    }
+                    this.$message({
+                        message: msg,
+                        type,
+                        duration: 2000
+                    });
+                }
+            },
+            async changeSwitch(item) {
+                console.log(item.id, !item.status)
                 let msg = ''
                 let type = 'success'
+                let {data} = await updateMember(item.id, item.status == 1 ? 2 : 1)
                 if (data.code === statusCode.success) {
                     msg = '操作成功'
-                    this.dialogFormVisible = false
+                    this.addDialog = false
                     this.init()
-                } else {
+                }else{
                     msg = data.msg
                     type = 'warning'
                 }
-                this.$message({
-                    message: msg,
-                    type,
-                    duration: 2000
-                });
-            },
-            changeSwitch(item) {
-                console.log(item.id, item.status)
             }
         }
     }

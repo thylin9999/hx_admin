@@ -1,78 +1,77 @@
 <template>
     <div>
-        <el-table :cell-style="setSellStyle" :span="24" :row-style="{height:'58px'}" :header-row-style="{height:'40px'}"
-                  v-loading="loading" ref="multipleTable" tooltip-effect="dark" :data="tableData" border
+        <el-table :data="tableData"
+                  border
                   style="width: 100%">
             <el-table-column type="index" label="序号"></el-table-column>
-            <el-table-column prop="ID" label="直播间ID"></el-table-column>
-            <el-table-column prop="title" label="直播间标题"></el-table-column>
-            <el-table-column prop="anchorAccount" label="主播账号"></el-table-column>
-            <el-table-column prop="anchorNickname" label="主播昵称"></el-table-column>
-            <el-table-column prop="recommend" label="是否推荐">
+            <el-table-column prop="room_id" label="直播间ID" width="100"></el-table-column>
+            <el-table-column prop="room_title" label="直播间标题" width="200"></el-table-column>
+            <el-table-column prop="heat_num" label="主播热度"></el-table-column>
+            <el-table-column prop="nick" label="主播昵称"></el-table-column>
+            <el-table-column prop="recommend" label="是否推荐" width="150">
                 <template slot-scope="scope">
                     <el-switch
-                            active-text="否"
-                            inactive-text="是"
-                            active-color="#ccc"
-                            inactive-color="green"
-                            @change="switchChange(scope.row)"
-                            v-model="scope.row.recommend">
+                            active-text="是"
+                            inactive-text="否"
+                            active-color="green"
+                            inactive-color="#ccc"
+                            @change="changeSwitch(scope.row,1)"
+                            v-model="scope.row.is_position == 2 ">
                     </el-switch>
                 </template>
             </el-table-column>
-            <el-table-column prop="sort" label="推荐热门排序"></el-table-column>
+            <el-table-column prop="sort" sortable label="热门排序"></el-table-column>
             <el-table-column prop="line" label="是否在线">
                 <template slot-scope="scope">
                     <div class="circle" :class="scope.row.line === 1  ?  'circleGreen' : 'circleRed'"></div>
                     {{scope.row.line === 1 ? '在线' : '离线'}}
                 </template>
             </el-table-column>
-            <el-table-column prop="liveRecord" label="直播记录"></el-table-column>
-            <el-table-column prop="createTime" label="创建时间"></el-table-column>
-            <el-table-column prop="recentOpenTime" label="最近开播时间"></el-table-column>
-            <el-table-column prop="visitNum" label="访问人数"></el-table-column>
-            <el-table-column prop="cover" label="直播封面">
+            <el-table-column prop="start_time" label="最近开播时间" width="200"></el-table-column>
+            <el-table-column prop="view_num" label="访问人数"></el-table-column>
+            <el-table-column prop="live_cover" label="直播封面">
                 <template slot-scope="scope">
                     <el-image
                             style="max-width: 32px;max-height: 32px"
-                            :src="scope.row.cover"
-                            :preview-src-list="[scope.row.cover,scope.row.cover]">
+                            :src="scope.row.live_cover"
+                            :preview-src-list="[scope.row.live_cover,scope.row.live_cover]">
                     </el-image>
                 </template>
             </el-table-column>
-            <el-table-column prop="status" label="状态">
+            <el-table-column prop="status" label="状态" width="150">
                 <template slot-scope="scope">
                     <el-switch
-                            active-text="禁播"
-                            inactive-text="正常"
-                            active-color="#ccc"
-                            inactive-color="green"
-                            @change="switchChange(scope.row)"
-                            v-model="scope.row.status">
+                            active-text="正常"
+                            inactive-text="禁播"
+                            active-color="green"
+                            inactive-color="#ccc"
+                            @change="changeSwitch(scope.row,2)"
+                            v-model="scope.row.status == 1 ">
                     </el-switch>
                 </template>
             </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-<!--                    <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)" type="text">编辑</button>-->
-                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit" circle></el-button>
+                    <!--                    <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)" type="text">编辑</button>-->
+                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit"
+                               circle></el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <el-dialog title="新增/编辑 广告" :visible.sync="dialog" width="40%">
+        <el-dialog title="新增/编辑" :visible.sync="dialog" width="40%">
             <el-form ref="ruleForm" :model="formItem" label-width="100px">
                 <el-form-item label="直播间标题">
-                    <el-input v-model="formItem.title"></el-input>
+                    <el-input v-model="formItem.room_title"></el-input>
                 </el-form-item>
                 <el-form-item label="是否推荐">
-                    <el-switch v-model="formItem.recommend" active-color="green" inactive-color="#ccc"></el-switch>
+                    <el-switch v-model="formItem.is_position == 2" active-color="green"
+                               inactive-color="#ccc"></el-switch>
                 </el-form-item>
                 <el-form-item label="推荐排序">
                     <el-input v-model="formItem.sort"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
-                    <el-switch v-model="formItem.status" active-text="正常" inactive-text="禁用">>
-                    </el-switch>
+                    <el-switch v-model="formItem.status == 1" active-text="正常" inactive-text="禁用"></el-switch>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">提交</el-button>
@@ -85,7 +84,7 @@
 </template>
 
 <script>
-    import {getLiveList} from "@/api/control";
+    import {getLiveList, editLive, forbidLive} from "@/api/control";
     import {statusCode} from "@/util/statusCode";
 
     export default {
@@ -97,10 +96,10 @@
                 currentId: '',
                 dialog: false,
                 formItem: {
-                    title: '',
-                    recommend: '',
+                    room_title: '',
+                    is_position: '',
                     sort: '',
-                    status: false,
+                    status: '',
                 }
             }
         },
@@ -114,7 +113,7 @@
                     let {data} = await getLiveList()
                     console.log(data)
                     if (data.code === statusCode.success) {
-                        this.tableData = JSON.parse(JSON.stringify(data.data))
+                        this.tableData = JSON.parse(JSON.stringify(data.rows))
                         this.loading = false
                     }
                 } catch (e) {
@@ -136,13 +135,63 @@
                         }
                     }
                 }
+                this.formItem.room_id = row.room_id
             },
-            onSubmit(type) {
-                // this.dialog = false
-                console.log(this.formItem)
+            async onSubmit() { //编辑提交
+                let msg = ''
+                let type = 'success'
+                let {data} = await editLive(this.formItem)
+                if (data.code === statusCode.success) {
+                    msg = '操作成功'
+                    this.addDialog = false
+                    this.init()
+                    this.dialog = false
+                } else {
+                    msg = data.msg
+                    type = 'warning'
+                }
+                this.$message({
+                    message: msg,
+                    type,
+                    duration: 2000
+                });
             },
-            switchChange(row) {
-                console.log(row)
+            async changeSwitch(item, num) {  // 1推荐  2直播间状态
+                if (num === 1) {  //设置推荐
+                    let msg = ''
+                    let type = 'success'
+                    let {data} = await editLive({room_id: item.room_id, is_position: item.is_position == 1 ? 2 : 1})
+                    if (data.code === statusCode.success) {
+                        msg = '操作成功'
+                        this.addDialog = false
+                        this.init()
+                    } else {
+                        msg = data.msg
+                        type = 'warning'
+                    }
+                    this.$message({
+                        message: msg,
+                        type,
+                        duration: 2000
+                    });
+                } else { // 禁播
+                    let msg = ''
+                    let type = 'success'
+                    let {data} = await forbidLive({room_id: item.room_id, status: item.status == 1 ? 2 : 1})
+                    if (data.code === statusCode.success) {
+                        msg = '操作成功'
+                        this.addDialog = false
+                        this.init()
+                    } else {
+                        msg = data.msg
+                        type = 'warning'
+                    }
+                    this.$message({
+                        message: msg,
+                        type,
+                        duration: 2000
+                    });
+                }
             },
             resetForm() {
                 for (let key in this.formItem) {

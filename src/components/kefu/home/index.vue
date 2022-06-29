@@ -4,7 +4,7 @@
     import AdminList from "./adminList/index"
     import AnchorList from "./anchorList/index"
     import MemberList from "./memberList/index"
-    import MatchList from "./matchList/index"
+    import LeagueList from "./leagueList/index"
     import LiveList from "./liveList/index"
     import ContentManage from "./contentManage/index"
     import AdvManage from "./advList"
@@ -17,7 +17,7 @@
             AdminList,
             AnchorList,
             MemberList,
-            MatchList,
+            LeagueList,
             LiveList,
             ContentManage,
             AdvManage,
@@ -38,7 +38,7 @@
                     {title: "管理员管理", path: "adminList", index: 1},
                     {title: "主播管理", path: "anchorList", index: 2},
                     {title: "会员管理", path: "memberList", index: 3},
-                    {title: "赛事管理", path: "matchList", index: 4},
+                    {title: "联赛管理", path: "leagueList", index: 4},
                     {title: "直播管理", path: "liveList", index: 5},
                     {title: "内容管理", path: "contentManage", index: 6},
                     {title: "广告管理", path: "advManage", index: 7},
@@ -47,24 +47,19 @@
                     {title: "网站开关配置", path: "webSet", index: 10},
                 ],
                 defaultIndex: '0',
-                index: 1,
+                index: '0',
                 userInfo: {},
             }
         },
         mounted() {
-            this.getGroup()
             this.userInfo = JSON.parse(JSON.stringify(localStorage.getItem('userInfo')))
         },
         methods: {
             leftSelect(item) {
                 this.index = item.index
                 this.page = item.path
-                // this.leftList[0].title = item.title
             },
             logout() {
-            },
-            getGroup() {
-
             },
         },
     }

@@ -2,38 +2,38 @@
     <div>
         <div class="top">
             <div class="searchTop">
-                <div>
-                    <el-col :span="16">
-                        <el-select style="width: 100%" v-model="currentType" placeholder="请选择分组">
-                            <el-option
-                                    v-for="item in groupList"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-                    <el-col :span="2" style="margin-left: 5px">
-                        <div class="grid-content bg-purple">
-                            <button class="btnSearch" @click="query('group_id')">赛事分类</button>
-                        </div>
-                    </el-col>
-                </div>
-                <div>
-                    <el-col :span="6" style="line-height: 40px;text-align: center">
-                        赛事名称
-                    </el-col>
-                    <el-col :span="10">
-                        <div class="grid-content bg-purple">
-                            <el-input :span="4" v-model="usernameQuery" placeholder="请输入赛事名称"></el-input>
-                        </div>
-                    </el-col>
-                    <el-col :span="2" style="margin-left: 5px">
-                        <div class="grid-content bg-purple">
-                            <button class="btnSearch" type="primary" @click="query('username')">查询</button>
-                        </div>
-                    </el-col>
-                </div>
+<!--                <div>-->
+<!--                    <el-col :span="16">-->
+<!--                        <el-select style="width: 100%" v-model="currentType" placeholder="请选择分组">-->
+<!--                            <el-option-->
+<!--                                    v-for="item in groupList"-->
+<!--                                    :key="item.id"-->
+<!--                                    :label="item.name"-->
+<!--                                    :value="item.id">-->
+<!--                            </el-option>-->
+<!--                        </el-select>-->
+<!--                    </el-col>-->
+<!--                    <el-col :span="2" style="margin-left: 5px">-->
+<!--                        <div class="grid-content bg-purple">-->
+<!--                            <button class="btnSearch" @click="query('group_id')">赛事分类</button>-->
+<!--                        </div>-->
+<!--                    </el-col>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <el-col :span="6" style="line-height: 40px;text-align: center">-->
+<!--                        赛事名称-->
+<!--                    </el-col>-->
+<!--                    <el-col :span="10">-->
+<!--                        <div class="grid-content bg-purple">-->
+<!--                            <el-input :span="4" v-model="usernameQuery" placeholder="请输入赛事名称"></el-input>-->
+<!--                        </div>-->
+<!--                    </el-col>-->
+<!--                    <el-col :span="2" style="margin-left: 5px">-->
+<!--                        <div class="grid-content bg-purple">-->
+<!--                            <button class="btnSearch" type="primary" @click="query('username')">查询</button>-->
+<!--                        </div>-->
+<!--                    </el-col>-->
+<!--                </div>-->
             </div>
         </div>
         <div>
@@ -42,16 +42,17 @@
                       v-loading="loading" ref="multipleTable" tooltip-effect="dark" :data="tableData" border
                       style="width: 100%">
                 <el-table-column type="index" label="序号"></el-table-column>
-                <el-table-column prop="teamId" label="赛队ID"></el-table-column>
-                <el-table-column prop="nameChs" label="赛队名称"></el-table-column>
-                <el-table-column prop="leagueId" label="联赛ID"></el-table-column>
-                <el-table-column prop="leagueType" label="分类"></el-table-column>
-                <el-table-column prop="logo" label="广告图片">
+                <el-table-column prop="leagueId" label="赛队ID"></el-table-column>
+                <el-table-column prop="nameChs" label="赛队全称"></el-table-column>
+                <el-table-column prop="nameChsShort" label="赛队简称"></el-table-column>
+                <el-table-column prop="hierarchy" label="赛事级别"></el-table-column>
+                <el-table-column prop="sort" label="排序"></el-table-column>
+                <el-table-column prop="leagueLogo" label="联赛logo">
                     <template slot-scope="scope">
                         <el-image
                                 style="max-width: 32px;max-height: 32px"
-                                :src="scope.row.logo"
-                                :preview-src-list="[scope.row.logo,scope.row.logo]">
+                                :src="scope.row.leagueLogo"
+                                :preview-src-list="[scope.row.leagueLogo,scope.row.leagueLogo]">
                         </el-image>
                     </template>
                 </el-table-column>
@@ -61,20 +62,20 @@
                                 active-color="green"
                                 inactive-color="#ccc"
                                 @change="switchChange(scope.row)"
-                                v-model="scope.row.isHot">
+                                v-model="scope.row.recommend">
                         </el-switch>
                     </template>
                 </el-table-column>
-                <el-table-column prop="optMan" label="操作人"></el-table-column>
-                <el-table-column prop="updateTime" label="操作时间"></el-table-column>
+                <el-table-column prop="adminUser" label="操作人"></el-table-column>
+                <el-table-column prop="update_time	" label="操作时间"></el-table-column>
                 <el-table-column prop="remark" label="备注"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <!--                        <button class="btnDel" @click="handleDelete(scope.$index, scope.row)">删除</button>-->
-<!--                        <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit"-->
-<!--                                   circle></el-button>-->
-                        <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete"
+                        <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit"
                                    circle></el-button>
+<!--                        <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete"-->
+<!--                                   circle></el-button>-->
                     </template>
                 </el-table-column>
             </el-table>
@@ -83,7 +84,7 @@
 </template>
 
 <script>
-    import {getMatchList} from "@/api/control";
+    import {getLeaguesList} from "@/api/control";
     import {statusCode} from "@/util/statusCode";
 
     export default {
@@ -110,7 +111,7 @@
             async init() {
                 this.loading = true
                 try {
-                    let {data} = await getMatchList()
+                    let {data} = await getLeaguesList()
                     console.log(data)
                     if (data.code === statusCode.success) {
                         this.tableData = JSON.parse(JSON.stringify(data.rows))

@@ -12,6 +12,7 @@
                 style="width: 100%">
             <el-table-column type="index" label="序号"></el-table-column>
             <el-table-column prop="account" label="主播账号"></el-table-column>
+            <el-table-column prop="member_id" label="主播ID"></el-table-column>
             <el-table-column prop="pic" label="头像">
                 <template slot-scope="scope">
                     <el-image
