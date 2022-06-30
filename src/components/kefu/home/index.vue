@@ -6,6 +6,7 @@
     import MemberList from "./memberList/index"
     import LeagueList from "./leagueList/index"
     import LiveList from "./liveList/index"
+    import MatchList from "./matchList/index"
     import ContentManage from "./contentManage/index"
     import AdvManage from "./advList"
     import AnnounceManage from "./announceManage"
@@ -19,6 +20,7 @@
             MemberList,
             LeagueList,
             LiveList,
+            MatchList,
             ContentManage,
             AdvManage,
             AnnounceManage,
@@ -39,12 +41,13 @@
                     {title: "主播管理", path: "anchorList", index: 2},
                     {title: "会员管理", path: "memberList", index: 3},
                     {title: "联赛管理", path: "leagueList", index: 4},
-                    {title: "直播管理", path: "liveList", index: 5},
-                    {title: "内容管理", path: "contentManage", index: 6},
-                    {title: "广告管理", path: "advManage", index: 7},
-                    {title: "公告管理", path: "announceManage", index: 8},
-                    {title: "用户反馈管理", path: "feedbackManage", index: 9},
-                    {title: "网站开关配置", path: "webSet", index: 10},
+                    {title: "赛事管理", path: "matchList", index: 5},
+                    {title: "直播管理", path: "liveList", index: 6},
+                    {title: "内容管理", path: "contentManage", index: 7},
+                    {title: "广告管理", path: "advManage", index: 8},
+                    {title: "公告管理", path: "announceManage", index: 9},
+                    {title: "用户反馈管理", path: "feedbackManage", index: 10},
+                    {title: "网站开关配置", path: "webSet", index: 11},
                 ],
                 defaultIndex: '0',
                 index: '0',

@@ -20,6 +20,8 @@ const url = {
     leaguesList: '/admin/leagues/lists',//联赛管理
     editLeagues: '/admin/leagues/edit',//联赛编辑
 
+    scheduleList: '/admin/schedule/lists',//联赛编辑
+
     liveList: '/admin/liveRoom/lists',//直播间列表
     editLive: '/admin/liveRoom/edit',//编辑间列表
     editLiveStatus: '/admin/liveRoom/editStatus',//禁播

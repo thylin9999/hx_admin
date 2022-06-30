@@ -23,6 +23,7 @@
                 </template>
             </el-table-column>
             <el-table-column prop="anchor_name" label="主播昵称"></el-table-column>
+            <el-table-column prop="heat" label="主播热度"></el-table-column>
             <el-table-column prop="update_time" label="编辑时间"></el-table-column>
             <el-table-column prop="status" label="状态">
                 <template slot-scope="scope">

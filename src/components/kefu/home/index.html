@@ -40,19 +40,22 @@
                             </div>
                         </div>
                         <template v-else-if="page === 'adminList'">
-                            <AdminList :userInfo="userInfo"></AdminList>
+                            <AdminList></AdminList>
                         </template>
                         <template v-else-if="page === 'anchorList'">
                             <AnchorList></AnchorList>
                         </template>
                         <template v-else-if="page === 'memberList'">
-                            <MemberList :groupList="groupList" :adminInfo="adminInfo"></MemberList>
+                            <MemberList></MemberList>
                         </template>
                         <template v-else-if="page === 'leagueList'">
-                            <LeagueList :groupList="groupList" :adminInfo="adminInfo"></LeagueList>
+                            <LeagueList></LeagueList>
+                        </template>
+                        <template v-else-if="page === 'matchList'">
+                            <MatchList></MatchList>
                         </template>
                         <template v-else-if="page === 'liveList'">
-                            <LiveList :adminInfo="adminInfo"></LiveList>
+                            <LiveList></LiveList>
                         </template>
                         <template v-else-if="page === 'contentManage'">
                             <ContentManage></ContentManage>

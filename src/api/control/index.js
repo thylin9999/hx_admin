@@ -118,7 +118,14 @@ export function getLeaguesList(data) { //获取联赛列表
     })
 }
 
-export function editLeaguesList(data) { //编辑联赛
+export function getScheduleList(data) { //编辑联赛
+    return request({
+        method: 'post',
+        url: apiUrl + url.scheduleList,
+        data
+    })
+}
+export function editLeaguesList(data) { //赛事列表
     return request({
         method: 'post',
         url: apiUrl + url.editLeagues,
