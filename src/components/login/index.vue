@@ -31,8 +31,8 @@
                     if (data.code === statusCode.success) {
                         this.userInfo = data.data
                         this.userInfo.token = data.token
-                        localStorage.setItem('token', data.token)
-                        localStorage.setItem('userInfo', JSON.stringify(data.data))
+                        window.sessionStorage.setItem('token', data.token)
+                        window.sessionStorage.setItem('userInfo', JSON.stringify(data.data))
                         setToken(data.token)
                         this.$message({
                             message: '登录成功',

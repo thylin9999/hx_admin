@@ -12,6 +12,7 @@
     import AnnounceManage from "./announceManage"
     import WebSet from "./webSet"
     import FeedbackManage from "./feedbackManage/index"
+    import {removeToken} from "@/util/cookie";
 
     export default {
         components: {
@@ -33,7 +34,7 @@
                 logo: require("@assets/logo.png"),
                 page: "home",
                 groupList: [],
-                adminInfo: JSON.parse(localStorage.getItem("adminInfo")),
+                adminInfo: JSON.parse(window.sessionStorage.getItem("adminInfo")),
                 leftList: [
                     // {title: "后台系统", path: "top", index: 0},
                     {title: "首页", path: "home", index: 0},
@@ -55,7 +56,7 @@
             }
         },
         mounted() {
-            this.userInfo = JSON.parse(JSON.stringify(localStorage.getItem('userInfo')))
+            this.userInfo = JSON.parse(JSON.stringify(window.sessionStorage.getItem('userInfo')))
         },
         methods: {
             leftSelect(item) {
@@ -63,6 +64,8 @@
                 this.page = item.path
             },
             logout() {
+              removeToken()
+              this.$router.push({path:'/login'})
             },
         },
     }
