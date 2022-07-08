@@ -6,6 +6,7 @@
     import MemberList from "./memberList/index"
     import LeagueList from "./leagueList/index"
     import LiveList from "./liveList/index"
+    import LiveRecord from "./liveRecord/index"
     import MatchList from "./matchList/index"
     import ContentManage from "./contentManage/index"
     import AdvManage from "./advList"
@@ -21,6 +22,7 @@
             MemberList,
             LeagueList,
             LiveList,
+            LiveRecord,
             MatchList,
             ContentManage,
             AdvManage,
@@ -44,11 +46,12 @@
                     {title: "联赛管理", path: "leagueList", index: 4},
                     {title: "赛事管理", path: "matchList", index: 5},
                     {title: "直播管理", path: "liveList", index: 6},
-                    {title: "内容管理", path: "contentManage", index: 7},
-                    {title: "广告管理", path: "advManage", index: 8},
-                    {title: "公告管理", path: "announceManage", index: 9},
-                    {title: "用户反馈管理", path: "feedbackManage", index: 10},
-                    {title: "网站开关配置", path: "webSet", index: 11},
+                    {title: "直播记录", path: "liveRecord", index: 7},
+                    {title: "内容管理", path: "contentManage", index: 8},
+                    {title: "广告管理", path: "advManage", index: 9},
+                    {title: "公告管理", path: "announceManage", index: 10},
+                    {title: "用户反馈管理", path: "feedbackManage", index: 11},
+                    {title: "网站开关配置", path: "webSet", index: 12},
                 ],
                 defaultIndex: '0',
                 index: '0',
@@ -64,12 +67,12 @@
                 this.page = item.path
             },
             logout() {
-              removeToken()
-              this.$router.push({path:'/login'})
+                removeToken()
+                this.$router.push({path: '/login'})
             },
         },
     }
 </script>
 <style scoped lang="scss">
-  @import "./index.scss";
+    @import "./index.scss";
 </style>

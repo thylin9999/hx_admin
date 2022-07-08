@@ -140,6 +140,13 @@ export function getLiveList(data) { //直播列表
         data
     })
 }
+export function getLiveRecord(data) { //直播记录
+    return request({
+        method: 'post',
+        url: apiUrl + url.liveRecord,
+        data
+    })
+}
 
 export function editLive(data) { //编辑直播间
     return request({
