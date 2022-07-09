@@ -1,9 +1,9 @@
 <template src="./index.html"></template>
 
 <script>
-    import {statusCode} from "../../util/statusCode";
+    import {statusCode} from "@/util/statusCode";
     import {login} from "../../api/user/index"
-    import {setToken} from "../../util/cookie"
+    import {setToken} from "@/util/cookie"
 
     export default {
         name: "login",
@@ -13,7 +13,6 @@
                 username: "",
                 password: "",
                 bg: require("@assets/bg.jpg"),
-                bg1: require("@assets/kefu/bg.jpg"),
                 checked: false,
                 userInfo: null,
             }
