@@ -1,45 +1,21 @@
 <template>
     <div>
         <div class="search">
-            <el-input v-model="input" placeholder="主播ID"></el-input>
-            <el-button @click="search" type="primary">主要按钮</el-button>
+            <el-input class="inp" v-model="input" placeholder="主播ID"></el-input>
+            <el-button @click="search" type="primary">搜索</el-button>
         </div>
         <el-table :data="tableData"
                   border
                   style="width: 100%">
             <el-table-column type="index" label="序号"></el-table-column>
-            <el-table-column prop="room_id" label="直播间ID" width="100"></el-table-column>
-            <el-table-column prop="room_title" label="直播间标题" width="200"></el-table-column>
-            <el-table-column prop="heat_num" label="主播热度"></el-table-column>
-            <el-table-column prop="nick" label="主播昵称"></el-table-column>
-            <el-table-column prop="sort" sortable label="热门排序"></el-table-column>
-            <el-table-column prop="line" label="是否在线">
-                <template slot-scope="scope">
-                    <div class="circle" :class="scope.row.line === 1  ?  'circleGreen' : 'circleRed'"></div>
-                    {{ scope.row.line === 1 ? '在线' : '离线' }}
-                </template>
-            </el-table-column>
-            <el-table-column prop="start_time" label="最近开播时间" width="200"></el-table-column>
-            <el-table-column prop="view_num" label="访问人数"></el-table-column>
-            <el-table-column prop="status" label="状态" width="150">
-                <template slot-scope="scope">
-                    <el-switch
-                        active-text="正常"
-                        inactive-text="禁播"
-                        active-color="green"
-                        inactive-color="#ccc"
-                        @change="changeSwitch(scope.row,2)"
-                        v-model="scope.row.status == 1 ">
-                    </el-switch>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作">
-                <template slot-scope="scope">
-                    <!--                    <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)" type="text">编辑</button>-->
-                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit"
-                               circle></el-button>
-                </template>
-            </el-table-column>
+            <el-table-column prop="room_id" label="直播间ID" ></el-table-column>
+            <el-table-column prop="nick" label="主播昵称" ></el-table-column>
+            <el-table-column prop="room_title" label="直播间标题" ></el-table-column>
+            <el-table-column prop="match_id" label="比赛ID" ></el-table-column>
+            <el-table-column prop="league_id" label="联赛ID" ></el-table-column>
+            <el-table-column prop="start_time" label="开播时间"></el-table-column>
+            <el-table-column prop="end_time" label="结束时间"></el-table-column>
+            <el-table-column prop="live_time" label="开播时长"></el-table-column>
         </el-table>
         <div class="block" v-if="total > 10">
             <el-pagination
@@ -54,6 +30,7 @@
 <script>
     import {getLiveRecord} from "@/api/control";
     import {statusCode} from "@/util/statusCode";
+    import {Format} from "@/util/common"
 
     export default {
         data() {
@@ -81,6 +58,10 @@
                     if (data.code === statusCode.success) {
                         this.total = data.total
                         this.tableData = JSON.parse(JSON.stringify(data.rows))
+                        this.tableData.map((item, i) => {
+                            item.start_time = Format(item.start_time, '-')
+                            item.end_time = Format(item.end_time, '-')
+                        })
                         this.loading = false
                     }
                 } catch (e) {
@@ -101,5 +82,8 @@
 
 <style scoped lang="scss">
 
-
+    .inp {
+        width: 200px;
+        margin: 10px;
+    }
 </style>
