@@ -7,7 +7,6 @@ export function Format(val, str) {
     let h = date.getHours() + ':';
     let m = date.getMinutes();
     // s = date.getSeconds();
-    console.log(Y + M + D + h + m);
     let res = Y + M + D + h + m
     return res
 // 输出结果：2014-04-23 18:55:49

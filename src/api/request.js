@@ -57,7 +57,6 @@ instance.interceptors.request.use(config => {
 
 instance.interceptors.response.use(response => {
     // 响应拦截器
-    console.log(111111144441111111)
     if(response.data.code == 407){
         Message(response.data.msg)
         console.log(window.vm)

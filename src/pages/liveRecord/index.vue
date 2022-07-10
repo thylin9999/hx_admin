@@ -8,7 +8,8 @@
                   border
                   style="width: 100%">
             <el-table-column type="index" label="序号"></el-table-column>
-            <el-table-column prop="room_id" label="直播间ID"></el-table-column>
+            <el-table-column prop="id" label="直播ID"></el-table-column>
+            <el-table-column prop="room_id" label="房间号"></el-table-column>
             <el-table-column prop="nick" label="主播昵称"></el-table-column>
             <el-table-column prop="room_title" label="直播间标题"></el-table-column>
             <el-table-column prop="match_id" label="比赛ID"></el-table-column>

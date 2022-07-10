@@ -1,18 +1,18 @@
 <template src="./index.html"></template>
 
 <script>
-    import AdminList from "./adminList/index"
-    import AnchorList from "./anchorList/index"
-    import MemberList from "./memberList/index"
-    import LeagueList from "./leagueList/index"
-    import LiveList from "./liveList/index"
-    import LiveRecord from "./liveRecord/index"
-    import MatchList from "./matchList/index"
-    import ContentManage from "./contentManage/index"
+    import AdminList from "./adminList"
+    import AnchorList from "./anchorList"
+    import MemberList from "./memberList"
+    import LeagueList from "./leagueList"
+    import LiveList from "./liveList"
+    import LiveRecord from "./liveRecord"
+    import MatchList from "./matchList"
+    import ContentManage from "./contentManage"
     import AdvManage from "./advList"
     import AnnounceManage from "./announceManage"
     import WebSet from "./webSet"
-    import FeedbackManage from "./feedbackManage/index"
+    import FeedbackManage from "./feedbackManage"
     import {removeToken} from "@/util/cookie";
 
     export default {
