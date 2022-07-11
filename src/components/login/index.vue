@@ -39,7 +39,7 @@
                             duration: 1000
                         });
                         setTimeout(() => {
-                            this.$router.push({name: 'Home'})
+                            this.$router.push({path: '/admin'})
                         }, 500)
 
                     } else {

@@ -20,13 +20,13 @@
                     @open="handleOpen"
                     @close="handleClose"
                 >
-                    <el-submenu v-for="(item,i) in menu" :index="i+1" :key="i">
+                    <el-submenu v-for="(item,i) in menu" :index="String(i+1)" :key="i">
                         <template slot="title">
                             <i :class="item.icon"></i>
                             <span>{{ item.title }}</span>
                         </template>
                         <template v-if="item.route.length">
-                            <el-menu-item v-for="(tem,n) in item.route" :index="tem.path" :key="n*i">{{ tem.txt }}</el-menu-item>
+                            <el-menu-item v-for="(tem,n) in item.route" :index="tem.path" :key="n">{{ tem.txt }}</el-menu-item>
                         </template>
                     </el-submenu>
 <!--                    <el-submenu index="2">-->
@@ -122,8 +122,8 @@
                         ]
                     },
                 ],
-                active: 'admin',
-                isCollapse: true,
+                active: '1',
+                isCollapse: false,
                 userInfo: sessionStorage.userInfo && JSON.parse(JSON.parse(JSON.stringify(sessionStorage.getItem('userInfo'))))
             }
         },
