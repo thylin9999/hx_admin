@@ -22,7 +22,7 @@
                 >
                     <el-submenu v-for="(item,i) in menu" :index="i+1" :key="i">
                         <template slot="title">
-                            <i class="el-icon-location"></i>
+                            <i :class="item.icon"></i>
                             <span>{{ item.title }}</span>
                         </template>
                         <template v-if="item.route.length">
