@@ -118,8 +118,8 @@ ol {
     width: 100px;
     height: 32px;
     margin: 3px 0 0 0;
-    border-radius: 6px;
-    background-color: #000;
+    border-radius: 10px;
+    background-color: #189e90;
     color: #fff;
     border: 0;
 }
@@ -128,19 +128,19 @@ ol {
     width: 108px;
     height: 40px;
     padding: 11px 26px;
-    border-radius: 10px;
+    border-radius: 15px;
     border: solid 1px #000;
     background-color: #fff;
 }
 
 .btnAdd {
-    width: 116px;
+    /*width: 116px;*/
     height: 40px;
     margin: 22px 30px 42px 10px;
     padding: 13px 26px;
-    border-radius: 10px;
+    border-radius: 15px;
     border: none;
-    background-color: #000;
+    background-color: #189e90;
     color: #fff;
 }
 
@@ -153,7 +153,7 @@ ol {
     width: 120px;
     height: 32px;
     padding: 7px 11px;
-    border-radius: 6px;
+    border-radius: 10px;
     border: solid 1px #000;
 }
 
@@ -163,7 +163,7 @@ ol {
     margin: 10px 10px 0 10px;
     padding: 7px 11px;
     border-radius: 6px;
-    background-color: #000;
+    background-color: #189e90;
     color: #fff;
     border: none;
 }
