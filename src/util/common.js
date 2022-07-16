@@ -1,6 +1,6 @@
 export function Format(val, str) {
     // 比如需要这样的格式 yyyy-MM-dd hh:mm:ss
-    let date = new Date(1398250549490);
+    let date = new Date(val/1000*1000);
     let Y = date.getFullYear() + str;
     let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + str;
     let D = date.getDate() + ' ';
@@ -9,8 +9,6 @@ export function Format(val, str) {
     // s = date.getSeconds();
     let res = Y + M + D + h + m
     return res
-// 输出结果：2014-04-23 18:55:49
-
 }
 
 export function MillisecondToTime(msd) {
