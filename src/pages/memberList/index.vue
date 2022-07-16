@@ -10,7 +10,6 @@
                 tooltip-effect="dark"
                 :data="tableData" border
                 style="width: 100%">
-            <!--            <el-table-column type="selection" width="55"></el-table-column>-->
             <el-table-column type="index" label="序号"></el-table-column>
             <el-table-column prop="account" label="账号"></el-table-column>
             <el-table-column prop="member_id" label="ID"></el-table-column>
@@ -33,11 +32,10 @@
 
             <el-table-column prop="opt" label="操作" width="200">
                 <template slot-scope="scope">
-                    <!--                    <button class="btnEditList" @click="handleEdit(scope.$index, scope.row)">编辑</button>-->
                     <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit"
                                circle></el-button>
-                    <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete"
-                               circle></el-button>
+<!--                    <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete"-->
+<!--                               circle></el-button>-->
                 </template>
             </el-table-column>
         </el-table>

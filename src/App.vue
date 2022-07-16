@@ -92,13 +92,13 @@
                         route: [
                             {path: '/admin', txt: '管理员'},
                             {path: '/memberList', txt: '会员管理'},
+                            {path: '/anchorList', txt: '主播管理'},
                         ]
                     },
                     {
                         title: "直播管理",
                         icon: 'el-icon-menu',
                         route: [
-                            {path: '/anchorList', txt: '主播管理'},
                             {path: '/liveList', txt: '直播间管理'},
                             {path: '/liveRecord', txt: '直播记录'},
                         ]

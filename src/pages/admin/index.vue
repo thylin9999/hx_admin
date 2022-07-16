@@ -1,8 +1,5 @@
 <template>
     <div>
-        <!--        <el-button style="float: right;border-radius: 10px;margin-bottom: 5px;background-color: #189e90;color: #fff"-->
-        <!--                   @click="addDialog = true">新增管理员+-->
-        <!--        </el-button>-->
         <div class="topBtnList">
             <button class="btnAdd" @click="handleEdit">新增管理员</button>
         </div>
@@ -17,41 +14,25 @@
             <el-table-column prop="status" label="状态">
                 <template slot-scope="scope">
                     <el-switch
-                            active-text="正常"
-                            inactive-text="禁用"
-                            active-color="green"
-                            inactive-color="#ccc"
-                            @change="changeSwitch(scope.row)"
-                            v-model="scope.row.status == 1">
+                        :disabled="userInfo && userInfo.account !== 'admin'"
+                        active-text="正常"
+                        inactive-text="禁用"
+                        active-color="green"
+                        inactive-color="#ccc"
+                        @change="changeSwitch(scope.row)"
+                        v-model="scope.row.status == 1">
                     </el-switch>
                 </template>
             </el-table-column>
             <el-table-column prop="update_by" label="操作人"></el-table-column>
             <el-table-column prop="username" label="操作">
                 <template slot-scope="scope">
-                    <!--                    <button class="btnDetail" @click="handleEdit(scope.$index, scope.row)" type="text">编辑</button>-->
-                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit"
+                    <el-button :disabled="userInfo && userInfo.account !== 'admin'"
+                               @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit"
                                circle></el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <!--        <el-dialog :title="isEditTxt" :visible.sync="dialogFormVisible">-->
-        <!--            <el-form :model="form">-->
-        <!--                <el-form-item label="账号">-->
-        <!--                    <el-input disabled v-model="form.username"></el-input>-->
-        <!--                </el-form-item>-->
-        <!--                <el-form-item label="密码">-->
-        <!--                    <el-input v-model="form.password" placeholder="不填写则默认当前"></el-input>-->
-        <!--                </el-form-item>-->
-        <!--            </el-form>-->
-        <!--            <el-switch v-if="!isComAdminPop" v-model="value" active-text="开启" inactive-text="禁用" active-color="#409EFF"-->
-        <!--                       inactive-color="#DCDFE6">-->
-        <!--            </el-switch>-->
-        <!--            <div slot="footer" class="dialog-footer">-->
-        <!--                <button class="btnCancle" @click="dialogFormVisible = false">取 消</button>-->
-        <!--                <button class="btnSubmit" @click="submit">提 交</button>-->
-        <!--            </div>-->
-        <!--        </el-dialog>-->
         <el-dialog title="编辑/新增" :visible.sync="addDialog" width="20%">
             <el-form :model="form">
                 <el-form-item label="账号">
@@ -63,9 +44,6 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <!--                <button class="btnCancle" @click="addDialog = false">取 消</button>-->
-                <!--                <button class="btnSubmit" type="primary" @click="submit()">提 交</button>-->
-
                 <el-button type="primary" @click="submit()">提交</el-button>
                 <el-button @click="addDialog = false">取消</el-button>
             </div>
@@ -74,18 +52,11 @@
 </template>
 
 <script>
+    import {mapState} from "vuex"
     import {getAdminList, addAdmin, updatePwd, updateAdmin} from "@/api/control";
     import {statusCode} from "@/util/statusCode";
 
     export default {
-        props: {
-            userInfo: {
-                type: [Object, String],
-                default: function () {
-                    return {}
-                }
-            }
-        },
         name: 'admin',
         data() {
             return {
@@ -107,6 +78,12 @@
         created() {
             this.init()
         },
+        computed: {
+            ...mapState({
+                userInfo: state => state.userInfo
+            }),
+        },
+
         methods: {
             async init() {
                 this.loading = true
@@ -208,59 +185,59 @@
 </script>
 
 <style scoped lang="scss">
-  .editBtn {
-    color: #1e82d2;
-  }
-
-  .popImg {
-    width: 50%;
-
-    img {
-      width: 100%;
+    .editBtn {
+        color: #1e82d2;
     }
-  }
 
-  .popImgSee {
-    width: 100%;
-  }
+    .popImg {
+        width: 50%;
 
-  /deep/ .el-table--border .el-table__cell,
-  .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
-    border: 0;
-  }
+        img {
+            width: 100%;
+        }
+    }
 
-  /deep/ .el-table tr {
-    cellspacing: 10px;
-    border: 1px solid #cccccc;
-    padding: 15px 0;
-  }
+    .popImgSee {
+        width: 100%;
+    }
 
-  /deep/ .el-table__body {
-    border-collapse: separate;
-    border-spacing: 0 10px;
-    background-color: #f6f6f6;
-  }
+    /deep/ .el-table--border .el-table__cell,
+    .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
+        border: 0;
+    }
 
-  /deep/ .el-dialog {
-    //弹窗
-    width: 400px !important;
-    border-radius: 20px;
-  }
+    /deep/ .el-table tr {
+        cellspacing: 10px;
+        border: 1px solid #cccccc;
+        padding: 15px 0;
+    }
 
-  /deep/ .el-dialog__title {
-    color: #fff;
-  }
+    /deep/ .el-table__body {
+        border-collapse: separate;
+        border-spacing: 0 10px;
+        background-color: #f6f6f6;
+    }
 
-  /deep/ .el-dialog__header {
-    background-color: #189e90;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    padding: 20px;
-  }
+    /deep/ .el-dialog {
+        //弹窗
+        width: 400px !important;
+        border-radius: 20px;
+    }
 
-  /deep/ .el-input__inner {
-    border: 0;
-    border-radius: 0;
-    border-bottom: 1px solid #ccc;
-  }
+    /deep/ .el-dialog__title {
+        color: #fff;
+    }
+
+    /deep/ .el-dialog__header {
+        background-color: #189e90;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        padding: 20px;
+    }
+
+    /deep/ .el-input__inner {
+        border: 0;
+        border-radius: 0;
+        border-bottom: 1px solid #ccc;
+    }
 </style>
