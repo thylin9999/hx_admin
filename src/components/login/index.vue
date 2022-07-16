@@ -33,6 +33,7 @@
                         window.sessionStorage.setItem('token', data.token)
                         window.sessionStorage.setItem('userInfo', JSON.stringify(data.data))
                         setToken(data.token)
+                        this.$store.commit('loginInfo',data.data)
                         this.$message({
                             message: '登录成功',
                             type: 'success',
