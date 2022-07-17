@@ -2,7 +2,8 @@
     <div>
         <div class="search">
             <el-input class="inp" v-model="input" placeholder="主播ID或房间号"></el-input>
-            <button class="btnAdd" @click="search">搜索</button>
+            <el-input class="inputLiveId" v-model="inputLiveId" placeholder="直播ID"></el-input>
+            <button class="btnSearch" @click="search">搜索</button>
         </div>
         <el-table :data="tableData"
                   border
@@ -42,6 +43,7 @@
                 loading: true,
                 tableData: [],
                 input: '',
+                inputLiveId: '',
             }
         },
         mounted() {
@@ -52,7 +54,8 @@
                 let dataJson = {
                     pageSize: this.pageSize,
                     pageNum: this.pageNum,
-                    room_id: this.input
+                    room_id: this.input,
+                    id:this.inputLiveId
                 }
                 this.loading = true
                 try {
@@ -89,5 +92,10 @@
     .inp {
         width: 200px;
         margin: 10px 0;
+    }
+
+    .inputLiveId {
+        width: 200px;
+        margin: 10px 10px;
     }
 </style>
