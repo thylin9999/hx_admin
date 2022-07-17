@@ -100,6 +100,8 @@
                         icon: 'el-icon-menu',
                         route: [
                             {path: '/liveList', txt: '直播间管理'},
+                            {path: '/liveOrder', txt: '预约列表'},
+                            {path: '/livingList', txt: '正在直播'},
                             {path: '/liveRecord', txt: '直播记录'},
                         ]
                     },

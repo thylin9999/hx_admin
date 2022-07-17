@@ -23,6 +23,7 @@ const url = {
     scheduleList: '/admin/schedule/lists',//联赛编辑
 
     liveList: '/admin/liveRoom/lists',//直播间列表
+    liveOrder: '/admin/preordain/lists',//预约列表
     liveRecord: '/admin/liveRoom/liveHistory',//直播记录
     editLive: '/admin/liveRoom/edit',//编辑间列表
     editLiveStatus: '/admin/liveRoom/editStatus',//禁播

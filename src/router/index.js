@@ -5,6 +5,8 @@ import Admin from "@/pages/admin"
 import MemberList from "@/pages/memberList"
 import AnchorList from "@/pages/anchorList"
 import LiveList from "@/pages/liveList"
+import Liveorder from "@/pages/liveOrder"
+import LivingList from "@/pages/livingList"
 import LiveRecord from "@/pages/liveRecord"
 import LeagueList from "@/pages/leagueList"
 import MatchList from "@/pages/matchList"
@@ -22,6 +24,8 @@ const routes = [
     {path: "/memberList", name: "MemberList", component: MemberList},
     {path: "/anchorList", name: "AnchorList", component: AnchorList},
     {path: "/liveList", name: "LiveList", component: LiveList},
+    {path: "/liveOrder", name: "liveOrder", component: Liveorder},
+    {path: "/livingList", name: "livingList", component: LivingList},
     {path: "/liveRecord", name: "LiveRecord", component: LiveRecord},
     {path: "/leagueList", name: "LeagueList", component: LeagueList},
     {path: "/matchList", name: "MatchList", component: MatchList},
