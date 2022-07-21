@@ -26,47 +26,48 @@
                             <span>{{ item.title }}</span>
                         </template>
                         <template v-if="item.route.length">
-                            <el-menu-item v-for="(tem,n) in item.route" :index="tem.path" :key="n">{{ tem.txt }}</el-menu-item>
+                            <el-menu-item v-for="(tem,n) in item.route" :index="tem.path" :key="n">{{ tem.txt }}
+                            </el-menu-item>
                         </template>
                     </el-submenu>
-<!--                    <el-submenu index="2">-->
-<!--                        <template slot="title">-->
-<!--                            <i class="el-icon-menu"></i>-->
-<!--                            <span>直播管理</span>-->
-<!--                        </template>-->
-<!--                        <el-menu-item index="/anchorList">主播管理</el-menu-item>-->
-<!--                        <el-menu-item index="/liveList">直播间管理</el-menu-item>-->
-<!--                        <el-menu-item index="/liveRecord">直播记录</el-menu-item>-->
-<!--                    </el-submenu>-->
-<!--                    <el-submenu index="3">-->
-<!--                        <template slot="title">-->
-<!--                            <i class="el-icon-setting"></i>-->
-<!--                            <span>赛事管理</span>-->
-<!--                        </template>-->
-<!--                        <el-menu-item index="/leagueList">联赛管理</el-menu-item>-->
-<!--                        <el-menu-item index="/matchList">赛事管理</el-menu-item>-->
-<!--                    </el-submenu>-->
-<!--                    <el-submenu index="4">-->
-<!--                        <template slot="title">-->
-<!--                            <i class="el-icon-location"></i>-->
-<!--                            <span>网站管理</span>-->
-<!--                        </template>-->
-<!--                        <el-menu-item index="/advList">广告管理</el-menu-item>-->
-<!--                        <el-menu-item index="/contentManage">内容管理</el-menu-item>-->
-<!--                        <el-menu-item index="/announceManage">公告管理</el-menu-item>-->
-<!--                        <el-menu-item index="/feedbackManage">用户反馈</el-menu-item>-->
-<!--                        <el-menu-item index="/webSet">全局开关</el-menu-item>-->
-<!--                    </el-submenu>-->
+                    <!--                    <el-submenu index="2">-->
+                    <!--                        <template slot="title">-->
+                    <!--                            <i class="el-icon-menu"></i>-->
+                    <!--                            <span>直播管理</span>-->
+                    <!--                        </template>-->
+                    <!--                        <el-menu-item index="/anchorList">主播管理</el-menu-item>-->
+                    <!--                        <el-menu-item index="/liveList">直播间管理</el-menu-item>-->
+                    <!--                        <el-menu-item index="/liveRecord">直播记录</el-menu-item>-->
+                    <!--                    </el-submenu>-->
+                    <!--                    <el-submenu index="3">-->
+                    <!--                        <template slot="title">-->
+                    <!--                            <i class="el-icon-setting"></i>-->
+                    <!--                            <span>赛事管理</span>-->
+                    <!--                        </template>-->
+                    <!--                        <el-menu-item index="/leagueList">联赛管理</el-menu-item>-->
+                    <!--                        <el-menu-item index="/matchList">赛事管理</el-menu-item>-->
+                    <!--                    </el-submenu>-->
+                    <!--                    <el-submenu index="4">-->
+                    <!--                        <template slot="title">-->
+                    <!--                            <i class="el-icon-location"></i>-->
+                    <!--                            <span>网站管理</span>-->
+                    <!--                        </template>-->
+                    <!--                        <el-menu-item index="/advList">广告管理</el-menu-item>-->
+                    <!--                        <el-menu-item index="/contentManage">内容管理</el-menu-item>-->
+                    <!--                        <el-menu-item index="/announceManage">公告管理</el-menu-item>-->
+                    <!--                        <el-menu-item index="/feedbackManage">用户反馈</el-menu-item>-->
+                    <!--                        <el-menu-item index="/webSet">全局开关</el-menu-item>-->
+                    <!--                    </el-submenu>-->
                 </el-menu>
             </div>
         </div>
         <div id="app">
             <div class="app_top" v-if="$route.path !== '/'">
                 <div class="top_title">
-<!--                    {{ active }}-{{}}-->
+                    <!--                    {{ active }}-{{}}-->
                 </div>
                 <div class="username" style="float: right">
-                    <div class="account">{{ userInfo.account }}</div>
+                    <div class="account">{{ userInfo && userInfo.account }}</div>
                     <button class="btn" @click="logout">退出</button>
                 </div>
             </div>
@@ -91,14 +92,16 @@
                         route: [
                             {path: '/admin', txt: '管理员'},
                             {path: '/memberList', txt: '会员管理'},
+                            {path: '/anchorList', txt: '主播管理'},
                         ]
                     },
                     {
                         title: "直播管理",
                         icon: 'el-icon-menu',
                         route: [
-                            {path: '/anchorList', txt: '主播管理'},
                             {path: '/liveList', txt: '直播间管理'},
+                            {path: '/liveOrder', txt: '预约列表'},
+                            {path: '/livingList', txt: '正在直播'},
                             {path: '/liveRecord', txt: '直播记录'},
                         ]
                     },
@@ -128,6 +131,9 @@
             }
         },
         methods: {
+            async init() {
+
+            },
             logout() {
                 removeToken()
                 this.$router.push({path: '/'})
@@ -139,12 +145,6 @@
                 console.log(key, keyPath);
             }
         },
-        watch: {
-            active(newVal, old) {
-                console.log("--------------------")
-                console.log(newVal)
-            }
-        }
     };
 </script>
 <style scoped lang="scss">
