@@ -1,23 +1,25 @@
 import Vue from 'vue'
-import AppAdmin from "./AppAdmin";
+import store from "./vux/store"
+import AppAdmin from "./App";
 import router from "./router"
+import "./mock"
 import "./style/index.css"
 
 import axios from "axios"
 import VueAxios from "vue-axios";
+
 
 Vue.use(VueAxios, axios)
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css'
 
-require('./mock.js')
-
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 
-new Vue({
+window.vm =  new Vue({
     router,
+    store,
     render: h => {
         return h(AppAdmin)
     }

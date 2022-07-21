@@ -1,6 +1,10 @@
 <template src="./index.html"></template>
 
 <script>
+    import {statusCode} from "@/util/statusCode";
+    import {login} from "../../api/user/index"
+    import {setToken} from "@/util/cookie"
+
     export default {
         name: "login",
         data() {
@@ -8,47 +12,48 @@
                 fullscreenLoading: false,
                 username: "",
                 password: "",
-                bg: require("@assets/kefu/bg.jpg"),
-                circleImg: require("@assets/kefu/d.png"),
-                loginImg: require("@assets/kefu/e.png"),
-                checked: false
+                bg: require("@assets/bg.jpg"),
+                checked: false,
+                userInfo: null,
             }
         },
         methods: {
-            login() {
+            async login() {
                 const loading = this.$loading({
                     lock: true,
                     text: '登录中',
                     spinner: 'el-icon-loading',
                     background: 'rgba(0, 0, 0, 0.7)'
                 });
-                this.axios({
-                    url: `${apiUrl}/admin/login/Login`,
-                    method: "post",
-                    data: {
-                        username: this.username,
-                        password: this.password
-                    }
-                }).then(res => {
-                    if (res.data.code == 20000) {
-                        localStorage.setItem("adminInfo", JSON.stringify(res.data))
+                try {
+                    let {data} = await login(this.username, this.password)
+                    if (data.code === statusCode.success) {
+                        this.userInfo = data.data
+                        this.userInfo.token = data.token
+                        window.sessionStorage.setItem('token', data.token)
+                        window.sessionStorage.setItem('userInfo', JSON.stringify(data.data))
+                        setToken(data.token)
+                        this.$store.commit('loginInfo',data.data)
                         this.$message({
                             message: '登录成功',
                             type: 'success',
                             duration: 1000
                         });
                         setTimeout(() => {
-                            this.$router.push({name: 'Home'})
+                            this.$router.push({path: '/admin'})
                         }, 500)
+
                     } else {
-                        this.$message.error(res.data.msg);
+                        this.$message({
+                            message: data.msg,
+                            type: 'warning',
+                            duration: 1000
+                        });
                     }
                     loading.close();
-                }).catch(err => {
-                    this.$message.error('登录失败');
-                    loading.close();
-                })
-
+                } catch (e) {
+                    console.log('error---error')
+                }
             }
         }
     }
