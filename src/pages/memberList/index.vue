@@ -12,11 +12,12 @@
                 style="width: 100%">
             <el-table-column type="index" label="序号"></el-table-column>
             <el-table-column prop="account" label="账号"></el-table-column>
-            <el-table-column prop="member_id" label="ID"></el-table-column>
+            <el-table-column prop="member_id" label="会员ID"></el-table-column>
             <el-table-column prop="nickname" label="昵称"></el-table-column>
-            <el-table-column prop="id" label="用户ID"></el-table-column>
-            <el-table-column prop="createTime" label="创建时间"></el-table-column>
-            <el-table-column prop="registerIp" label="登录IP"></el-table-column>
+            <el-table-column prop="create_time" label="创建时间"></el-table-column>
+            <el-table-column prop="update_time" label="更新时间"></el-table-column>
+            <el-table-column prop="last_ip" label="上次登录IP"></el-table-column>
+            <el-table-column prop="login_times" label="登录次数"></el-table-column>
             <el-table-column prop="status" label="状态">
                 <template slot-scope="scope" label="状态">
                     <el-switch
