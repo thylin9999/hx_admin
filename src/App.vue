@@ -67,7 +67,7 @@
                     <!--                    {{ active }}-{{}}-->
                 </div>
                 <div class="username" style="float: right">
-                    <div class="account">{{ userInfo && userInfo.account }}</div>
+                    <div class="account">{{userInfo && userInfo.account }}</div>
                     <button class="btn" @click="logout">退出</button>
                 </div>
             </div>
